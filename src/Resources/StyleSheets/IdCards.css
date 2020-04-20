@@ -1,0 +1,57 @@
+/** 
+* @Author Robert Skaar 
+* @Project untitled1  -  https://github.com/robskaar
+* @Date 14-04-2020
+**/
+
+.root {
+    -fx-background-color: transparent;
+}
+
+.iDReader {
+    -fx-background-image: url('/Resources/Images/idreader.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+}
+
+.frank {
+    -fx-background-image: url('/Resources/Images/frankID.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+}
+
+.karsten {
+    -fx-background-image: url('/Resources/Images/KarstenID.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+}
+
+.robert {
+    -fx-background-image: url('/Resources/Images/RobertID.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+}
+
+.kasper {
+    -fx-background-image: url('/Resources/Images/KasperID.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+}
+
+.jacob {
+    -fx-background-image: url('/Resources/Images/JacobID.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+}
