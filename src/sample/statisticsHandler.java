@@ -2,8 +2,6 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -19,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Date;
 import java.util.Locale;
@@ -48,9 +47,10 @@ public class statisticsHandler extends VBox {
         Label productLabel = new Label("Product");
         ComboBox<String> chooseProduct = new ComboBox<>(getProductListFromDB());
         chooseProduct.setValue("All");
-        chooseProduct.setVisibleRowCount(5);
+        chooseProduct.setVisibleRowCount(10);
         chooseProduct.setOnAction(event -> {
-            System.out.println("Product changed");
+            currentProduct = chooseProduct.getValue();
+            updateChart();
         });
 
         Label dateFromLabel = new Label("From");
@@ -182,6 +182,8 @@ public class statisticsHandler extends VBox {
 
         chartData.add(series); // Add the series to the observable list
 
+        fetchData();
+
     }
 
     private void xAxis_Week() {
@@ -194,14 +196,14 @@ public class statisticsHandler extends VBox {
         int currentWeekNumber;
         String weekName;
 
-        do{
+        do {
             currentWeekNumber = getWeekNumber(tempDate);
             weekName = "Week " + getWeekNumber(tempDate) + " " + tempDate.getYear();
-            series.getData().add(new XYChart.Data<>(weekName,ran.nextInt(30)));
+            series.getData().add(new XYChart.Data<>(weekName, ran.nextInt(30)));
 
-            do{
+            do {
                 tempDate = tempDate.plusDays(1);
-            } while(getWeekNumber(tempDate) == currentWeekNumber);
+            } while (getWeekNumber(tempDate) == currentWeekNumber);
         }
         while (tempDate.compareTo(lastDate) <= 0);
 
@@ -218,14 +220,14 @@ public class statisticsHandler extends VBox {
         Month currentMonth;
         String monthName;
 
-        do{
+        do {
             currentMonth = tempDate.getMonth();
             monthName = currentMonth + " " + tempDate.getYear();
-            series.getData().add(new XYChart.Data<>(monthName,ran.nextInt(30)));
+            series.getData().add(new XYChart.Data<>(monthName, ran.nextInt(30)));
 
-            do{
+            do {
                 tempDate = tempDate.plusDays(1);
-            }while (tempDate.getMonth() == currentMonth);
+            } while (tempDate.getMonth() == currentMonth);
         }
         while (tempDate.compareTo(lastDate) <= 0);
 
@@ -242,7 +244,7 @@ public class statisticsHandler extends VBox {
         int tempYear = firstYear;
 
         do {
-            series.getData().add(new XYChart.Data<>(String.valueOf(tempYear),ran.nextInt(30)));
+            series.getData().add(new XYChart.Data<>(String.valueOf(tempYear), ran.nextInt(30)));
             tempYear++;
         }
         while (tempYear <= lastYear);
@@ -251,7 +253,7 @@ public class statisticsHandler extends VBox {
 
     }
 
-    private void showAlert(String text){
+    private void showAlert(String text) {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Something went wrong");
@@ -260,28 +262,64 @@ public class statisticsHandler extends VBox {
         alert.showAndWait();
     }
 
-    private int getWeekNumber(LocalDate date){
+    private int getWeekNumber(LocalDate date) {
         return date.get(WeekFields.of(new Locale("US")).weekOfWeekBasedYear());
     }
 
     // Gets list of all products from database
-    private ObservableList<String> getProductListFromDB(){
+    private ObservableList<String> getProductListFromDB() {
 
         ObservableList<String> products = FXCollections.observableArrayList();
         products.add("All");
 
         DB.selectSQL("SELECT fldName FROM tblProduct");
 
-        do{
+        do {
             String data = DB.getData();
-            if (data.equals(DB.NOMOREDATA)){
+            if (data.equals(DB.NOMOREDATA)) {
                 break;
-            }else{
+            } else {
                 products.add(data);
             }
-        } while(true);
+        } while (true);
 
         return products;
+    }
+
+    private void fetchData() {
+
+        DB.selectSQL("SELECT tblProductReceipt.fldQuantity, tblProduct.fldName, CAST(tblReceipt.fldDate AS DATE)\n" +
+                "FROM ((tblProductReceipt\n" +
+                "INNER JOIN tblProduct ON tblProductReceipt.fldProductId = tblProduct.fldProductId)\n" +
+                "INNER JOIN tblReceipt ON tblProductReceipt.fldReceiptId = tblReceipt.fldReceiptId)");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String data;
+
+        do {
+            data = DB.getData();
+            if (data.equals(DB.NOMOREDATA)) {
+                break;
+            } else {
+                Product p = new Product(Integer.parseInt(data),DB.getData(),LocalDate.parse(DB.getData(),formatter));
+            }
+        } while (true);
+
+        System.out.println("done");
+
+    }
+
+    private class Product {
+
+        private int quantity;
+        private String name;
+        private LocalDate date;
+
+        public Product(int quantity, String name, LocalDate date) {
+            this.quantity = quantity;
+            this.name = name;
+            this.date = date;
+        }
     }
 
 
