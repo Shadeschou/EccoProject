@@ -2,6 +2,8 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -29,6 +31,7 @@ public class statisticsHandler extends VBox {
     private Method updateMethod;                        // References current method associated with selected radio button (day, week, etc.)
     private DatePicker dateFrom;
     private DatePicker dateTo;
+    private String currentProduct;
     private ObservableList<XYChart.Series<String, Number>> chartData = FXCollections.observableArrayList();  // Data for chart
 
     private statisticsHandler() {
@@ -43,7 +46,13 @@ public class statisticsHandler extends VBox {
         top.setMinHeight(75);
 
         Label productLabel = new Label("Product");
-        TextField productText = new TextField("All");
+        ComboBox<String> chooseProduct = new ComboBox<>(getProductListFromDB());
+        chooseProduct.setValue("All");
+        chooseProduct.setVisibleRowCount(5);
+        chooseProduct.setOnAction(event -> {
+            System.out.println("Product changed");
+        });
+
         Label dateFromLabel = new Label("From");
         dateFrom = new DatePicker();
         Label dateToLabel = new Label("To");
@@ -74,7 +83,7 @@ public class statisticsHandler extends VBox {
             }
         });
 
-        top.getChildren().addAll(productLabel, productText, dateFromLabel, dateFrom, dateToLabel, dateTo);
+        top.getChildren().addAll(productLabel, chooseProduct, dateFromLabel, dateFrom, dateToLabel, dateTo);
 
         // HBox middle
         HBox mid = new HBox(10);
@@ -85,7 +94,6 @@ public class statisticsHandler extends VBox {
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
         chart = new LineChart<>(xAxis, yAxis);
-        chart.setTitle(productText.getText());
         chart.setPrefWidth(2000);
 
         mid.getChildren().addAll(chart);
@@ -254,6 +262,26 @@ public class statisticsHandler extends VBox {
 
     private int getWeekNumber(LocalDate date){
         return date.get(WeekFields.of(new Locale("US")).weekOfWeekBasedYear());
+    }
+
+    // Gets list of all products from database
+    private ObservableList<String> getProductListFromDB(){
+
+        ObservableList<String> products = FXCollections.observableArrayList();
+        products.add("All");
+
+        DB.selectSQL("SELECT fldName FROM tblProduct");
+
+        do{
+            String data = DB.getData();
+            if (data.equals(DB.NOMOREDATA)){
+                break;
+            }else{
+                products.add(data);
+            }
+        } while(true);
+
+        return products;
     }
 
 

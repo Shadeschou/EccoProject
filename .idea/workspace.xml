@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Date picker and day/week/month/year now works with dummy data">
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Refactoring">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/sqljdbc4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sqljdbc4.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/DB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EccoProject12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/EccoProject12.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/EccoProject12/sample/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/EccoProject12/sample/Controller.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/EccoProject12/sample/statisticsHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/EccoProject12/sample/statisticsHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/statisticsHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/statisticsHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,7 +94,9 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectId" id="1aikizvvRURF8lMf4iwMqPhAhWk" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectReloadState">
     <option name="STATE" value="0" />
   </component>
@@ -96,6 +106,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="GoToFile.includeJavaFiles" value="false" />
@@ -104,15 +115,20 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="OverrideImplement.combined" value="false" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dynamic.classpath" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/sqljdbc4.jar!/" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
   </component>
   <component name="RunManager" selected="Application.Main">
@@ -222,7 +238,7 @@
       <workItem from="1587287318853" duration="5112000" />
       <workItem from="1587360867836" duration="322000" />
       <workItem from="1587366224375" duration="31707000" />
-      <workItem from="1587457731634" duration="4020000" />
+      <workItem from="1587457731634" duration="7359000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1587361090319</created>
@@ -245,7 +261,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587458491040</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Refactoring">
+      <created>1587462058821</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1587462058821</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -254,13 +277,19 @@
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <MESSAGE value="init" />
     <MESSAGE value="Initial Statistics layout" />
     <MESSAGE value="Date picker and day/week/month/year now works with dummy data" />
-    <option name="LAST_COMMIT_MESSAGE" value="Date picker and day/week/month/year now works with dummy data" />
+    <MESSAGE value="Refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactoring" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="361" y="72" key="#Project_Structure" timestamp="1587462471565">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="72" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1587462471565" />
     <state x="485" y="72" key="#TestLineChart" timestamp="1587387355516">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -282,43 +311,45 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="160" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824@0.0.1536.824" timestamp="1587421719931" />
-    <state x="463" y="13" key="CommitChangelistDialog2" timestamp="1587462013841">
+    <state x="463" y="13" key="CommitChangelistDialog2" timestamp="1587462058091">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="463" y="13" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1587462013841" />
+    <state x="463" y="13" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1587462058091" />
     <state x="579" y="116" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587361360156" />
     <state x="184" y="86" key="DiffContextDialog" timestamp="1587361251264">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="184" y="86" key="DiffContextDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587361251264" />
-    <state x="740" y="261" key="FileChooserDialogImpl" timestamp="1587225986786">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="592" y="207" key="FileChooserDialogImpl" timestamp="1587462465145">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="592" y="207" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1587462465145" />
     <state x="740" y="261" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587225986786" />
-    <state width="1493" height="583" key="GridCell.Tab.0.bottom" timestamp="1587461995872">
+    <state width="1493" height="583" key="GridCell.Tab.0.bottom" timestamp="1587465225423">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="583" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587461995872" />
-    <state width="1493" height="583" key="GridCell.Tab.0.center" timestamp="1587461995872">
+    <state width="1493" height="583" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587465225423" />
+    <state width="1493" height="583" key="GridCell.Tab.0.center" timestamp="1587465225423">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="583" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1587461995872" />
-    <state width="1493" height="583" key="GridCell.Tab.0.left" timestamp="1587461995872">
+    <state width="1493" height="583" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1587465225423" />
+    <state width="1493" height="583" key="GridCell.Tab.0.left" timestamp="1587465225423">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="583" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1587461995872" />
-    <state width="1493" height="583" key="GridCell.Tab.0.right" timestamp="1587461995872">
+    <state width="1493" height="583" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1587465225423" />
+    <state width="1493" height="583" key="GridCell.Tab.0.right" timestamp="1587465225423">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="583" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1587461995872" />
-    <state x="807" y="435" key="VCS.ChangelistChooser" timestamp="1587361366497">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="583" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1587465225423" />
+    <state x="646" y="345" key="VCS.ChangelistChooser" timestamp="1587462088301">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="646" y="345" key="VCS.ChangelistChooser/0.0.1536.824@0.0.1536.824" timestamp="1587462088301" />
     <state x="807" y="435" key="VCS.ChangelistChooser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587361366497" />
-    <state x="442" y="200" key="Vcs.Push.Dialog.v2" timestamp="1587458493522">
+    <state x="442" y="200" key="Vcs.Push.Dialog.v2" timestamp="1587462060721">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="442" y="200" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1587458493522" />
+    <state x="442" y="200" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1587462060721" />
     <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587361255735" />
     <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1587360868497">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -332,6 +363,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="493" y="205" key="git4idea.merge.GitPullDialog/0.0.1536.824@0.0.1536.824" timestamp="1587366987483" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1587462531126">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1587462531126" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

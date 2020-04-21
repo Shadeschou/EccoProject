@@ -18,5 +18,9 @@ public class Controller implements Initializable {
         statisticsHandler sh = statisticsHandler.getInstance();
         stackPane.getChildren().add(sh);
 
+        DB.selectSQL("SELECT fldName FROM tblProduct");
+
+
+
     }
 }

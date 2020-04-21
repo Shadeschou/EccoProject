@@ -9,7 +9,7 @@ public class User {
 
     private User(int id) {
         this.id = id;
-        //constructor class using data from DB
+        //constructor class using data from sample.DB
     }
 
     public static User getInstance() throws NullPointerException {
