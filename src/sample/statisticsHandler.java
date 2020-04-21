@@ -13,9 +13,9 @@ import javafx.scene.layout.VBox;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.temporal.WeekFields;
 import java.util.Date;
@@ -24,12 +24,12 @@ import java.util.Random;
 
 public class statisticsHandler extends VBox {
 
-    private static statisticsHandler instance = null;  // Singleton that will be returned on getInstance()
+    private static statisticsHandler instance = null;   // Singleton that will be returned on getInstance()
     private LineChart<String, Number> chart;            // Chart that shows statistics
     private Method updateMethod;                        // References current method associated with selected radio button (day, week, etc.)
     private DatePicker dateFrom;
     private DatePicker dateTo;
-    private ObservableList<XYChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
+    private ObservableList<XYChart.Series<String, Number>> chartData = FXCollections.observableArrayList();  // Data for chart
 
     private statisticsHandler() {
 
@@ -108,7 +108,7 @@ public class statisticsHandler extends VBox {
         rbMonth.setToggleGroup(radioButtonGroup);
         rbYear.setToggleGroup(radioButtonGroup);
 
-        // When a radio button
+        // When a radio button is pressed, it changes the method for chart updates
         radioButtonGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
 
             String text = newValue.toString();
@@ -181,15 +181,21 @@ public class statisticsHandler extends VBox {
         XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
         Random ran = new Random();
 
-        int firstWeekNumber = dateFrom.getValue().get(WeekFields.of(new Locale("US")).weekOfWeekBasedYear());
-        int lastWeekNumber =  dateTo.getValue().get(WeekFields.of(new Locale("US")).weekOfWeekBasedYear());
-        int tempWeekNumber = firstWeekNumber;
+        LocalDate tempDate = dateFrom.getValue();
+        LocalDate lastDate = dateTo.getValue();
+        int currentWeekNumber;
+        String weekName;
 
         do{
-            series.getData().add(new XYChart.Data<>(String.valueOf(tempWeekNumber),ran.nextInt(30)));
-            tempWeekNumber++;
+            currentWeekNumber = getWeekNumber(tempDate);
+            weekName = "Week " + getWeekNumber(tempDate) + " " + tempDate.getYear();
+            series.getData().add(new XYChart.Data<>(weekName,ran.nextInt(30)));
+
+            do{
+                tempDate = tempDate.plusDays(1);
+            } while(getWeekNumber(tempDate) == currentWeekNumber);
         }
-        while (tempWeekNumber <= lastWeekNumber);
+        while (tempDate.compareTo(lastDate) <= 0);
 
         chartData.add(series); // Add the series to the observable list
     }
@@ -198,24 +204,28 @@ public class statisticsHandler extends VBox {
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
         Random ran = new Random();
-        int firstMonthNumber = dateFrom.getValue().getMonthValue();
-        int lastMonthNumber = dateTo.getValue().getMonthValue();
-        int tempMonthNumber = firstMonthNumber;
+
+        LocalDate tempDate = dateFrom.getValue();
+        LocalDate lastDate = dateTo.getValue();
+        Month currentMonth;
         String monthName;
-        DateFormatSymbols dfs = new DateFormatSymbols();
 
         do{
-            monthName = dfs.getMonths()[tempMonthNumber - 1];
+            currentMonth = tempDate.getMonth();
+            monthName = currentMonth + " " + tempDate.getYear();
             series.getData().add(new XYChart.Data<>(monthName,ran.nextInt(30)));
-            tempMonthNumber++;
+
+            do{
+                tempDate = tempDate.plusDays(1);
+            }while (tempDate.getMonth() == currentMonth);
         }
-        while (tempMonthNumber <= lastMonthNumber);
+        while (tempDate.compareTo(lastDate) <= 0);
 
         chartData.add(series); // Add the series to the observable list
     }
 
-    private void xAxis_Year()
-    {
+    private void xAxis_Year() {
+
         XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
         Random ran = new Random();
 
@@ -241,5 +251,10 @@ public class statisticsHandler extends VBox {
 
         alert.showAndWait();
     }
+
+    private int getWeekNumber(LocalDate date){
+        return date.get(WeekFields.of(new Locale("US")).weekOfWeekBasedYear());
+    }
+
 
 }
