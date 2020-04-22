@@ -15,14 +15,15 @@ import java.util.ArrayList;
 
 public class Transactions extends VBox {
 
-    private static Transactions instance = null;
+    private static Transactions instance = null;                                              // Singleton instance
     private DatePicker dateFrom;
     private DatePicker dateTo;
     private TableView transactionsTable;
     TableColumn<LocalDateTime, Transaction> dateTimeColumn;
-    private ArrayList<Transaction> allData = new ArrayList<>();
-    private ObservableList<Transaction> filteredData = FXCollections.observableArrayList();
+    private ArrayList<Transaction> allData = new ArrayList<>();                               // Stores all transactions from database
+    private ObservableList<Transaction> filteredData = FXCollections.observableArrayList();   // Stores transactions within date range
 
+    // Constructor
     private Transactions() {
 
         // Temp Margin
@@ -90,6 +91,7 @@ public class Transactions extends VBox {
 
         transactionsTable.setPrefWidth(2000);
         transactionsTable.setPrefHeight(1000);
+        transactionsTable.setItems(filteredData);
         transactionsTable.getColumns().addAll(customerColumn, dateTimeColumn, priceColumn, receiptIdColumn);
         mid.getChildren().addAll(transactionsTable);
 
@@ -99,6 +101,7 @@ public class Transactions extends VBox {
         getDisplayData();
     }
 
+    // Returns singleton instance
     public static Transactions getInstance() {
         if (instance == null) {
             instance = new Transactions();
@@ -106,14 +109,18 @@ public class Transactions extends VBox {
         return instance;
     }
 
+    // Gets all transactions from database
     private void fetchData() {
 
+        // Gets name, date, price and id of the receipt from database
         DB.selectSQL("SELECT tblUser.fldFullName,CONVERT(VARCHAR,tblReceipt.fldDate,120), tblReceipt.fldTotalPrice, tblReceipt.fldReceiptId\n" +
                 "FROM tblReceipt\n" +
                 "INNER JOIN tblUser ON tblReceipt.fldCustomerId = tblUser.fldUserId");
 
+        // Used to format date string from database
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+        // Inserts data into objects and stores them in array list
         String data;
         do {
             data = DB.getData();
@@ -124,21 +131,26 @@ public class Transactions extends VBox {
             }
         } while (true);
 
-        transactionsTable.setItems(filteredData);
     }
 
+    // Gets all transactions within date picker range and displays on table view
     private void getDisplayData(){
 
+        // Clears existing data
         filteredData.clear();
 
+        // Finds all transactions within range of date pickers
         for (Transaction t : allData){
             if(t.dateTime.toLocalDate().compareTo(dateFrom.getValue()) >= 0 && t.dateTime.toLocalDate().compareTo(dateTo.getValue()) <= 0){
                 filteredData.add(t);
             }
         }
+
+        // Sorts table view ascending by date
         transactionsTable.getSortOrder().add(dateTimeColumn);
     }
 
+    // Makes pop up on screen with input as warning message
     private void showAlert(String text) {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -148,6 +160,7 @@ public class Transactions extends VBox {
         alert.showAndWait();
     }
 
+    // Used to organise data from database
     public class Transaction {
 
         private String customer;
