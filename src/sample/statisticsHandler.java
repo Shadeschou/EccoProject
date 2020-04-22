@@ -11,8 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
@@ -23,15 +21,16 @@ import java.util.*;
 
 public class statisticsHandler extends VBox {
 
-    private static statisticsHandler instance = null;   // Singleton that will be returned on getInstance()
-    private LineChart<String, Number> chart;            // Chart that shows statistics
-    private Method updateMethod;                        // References current method associated with selected radio button (day, week, etc.)
-    private DatePicker dateFrom;
+    private static statisticsHandler instance = null;        // Singleton that will be returned on getInstance()
+    private LineChart<String, Number> chart;                 // Chart that shows statistics
+    private showDataStrategy strategy = new dayStrategy();   // Strategy to update chart. Changes with user input
+    private DatePicker dateFrom;                            
     private DatePicker dateTo;
-    private String currentProduct = "All";
-    private ArrayList<Product> allProductSales = new ArrayList<>();
-    private ObservableList<XYChart.Series<String, Number>> chartData = FXCollections.observableArrayList();  // Data for chart
+    private String currentProduct = "All";                    // Stores current chosen product
+    private ArrayList<Product> allData = new ArrayList<>();   // All data from the database
+    private ObservableList<XYChart.Series<String, Number>> filteredData = FXCollections.observableArrayList();  // Data for chart filtered by user choices
 
+    //Constructor
     private statisticsHandler() {
 
         fetchData();
@@ -99,7 +98,7 @@ public class statisticsHandler extends VBox {
         chart.setPrefWidth(2000);
 
         mid.getChildren().addAll(chart);
-        chart.setData(chartData);
+        chart.setData(filteredData);
         chart.setAnimated(false);                // Animated changes disabled because it is bugged
 
 
@@ -118,20 +117,24 @@ public class statisticsHandler extends VBox {
         rbMonth.setToggleGroup(radioButtonGroup);
         rbYear.setToggleGroup(radioButtonGroup);
 
-        // When a radio button is pressed, it changes the method for chart updates
-        radioButtonGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-
-            String text = newValue.toString();
-            String selectedButtonText = "xAxis_" + text.substring(text.indexOf("'") + 1, text.length() - 1);
-
-            try {
-                updateMethod = this.getClass().getDeclaredMethod(selectedButtonText);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-
+        rbDay.setOnAction(event -> {
+            strategy = new dayStrategy();
             updateChart();
+        });
 
+        rbWeek.setOnAction(event -> {
+            strategy = new weekStrategy();
+            updateChart();
+        });
+
+        rbMonth.setOnAction(event -> {
+            strategy = new monthStrategy();
+            updateChart();
+        });
+
+        rbYear.setOnAction(event -> {
+            strategy = new yearStrategy();
+            updateChart();
         });
 
         rbDay.setSelected(true);
@@ -142,6 +145,7 @@ public class statisticsHandler extends VBox {
 
     }
 
+    // Return singleton instance
     public static statisticsHandler getInstance() {
 
         if (instance == null) {
@@ -151,103 +155,13 @@ public class statisticsHandler extends VBox {
         return instance;
     }
 
+    // When user changes settings this method will clear existing data and run update strategy
     private void updateChart() {
-
-        chartData.clear();   // Clear existing data from the observable list
-
-        try {
-            updateMethod.invoke(this);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
+        filteredData.clear();   // Clear existing data from the observable list
+        strategy.updateChart();
     }
 
-    private void xAxis_Day() {
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
-
-        LocalDate tempDate = dateFrom.getValue();
-
-        do {
-            // Convert LocalDate to Date
-            Date date = Date.from(tempDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            // Determine the day of the week for display on x-axis
-            String dayName = new SimpleDateFormat("EEEE").format(date) + " - " + tempDate.getDayOfMonth() + "/" + tempDate.getMonthValue();
-            // Add data to the series
-            series.getData().add(new XYChart.Data<>(dayName, getSalesOnDay(tempDate)));
-
-            tempDate = tempDate.plusDays(1);
-
-        } while (tempDate.compareTo(dateTo.getValue()) <= 0);  // Until the whole chosen period is covered
-
-        chartData.add(series); // Add the series to the observable list
-    }
-
-    private void xAxis_Week() {
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
-
-        LocalDate tempDate = dateFrom.getValue();
-        LocalDate lastDate = dateTo.getValue();
-        int currentWeekNumber;
-        String weekName;
-
-        do {
-            currentWeekNumber = getWeekNumber(tempDate);
-            weekName = "Week " + getWeekNumber(tempDate) + " " + tempDate.getYear();
-            series.getData().add(new XYChart.Data<>(weekName, getSalesOnWeek(tempDate)));
-
-            do {
-                tempDate = tempDate.plusDays(1);
-            } while (getWeekNumber(tempDate) == currentWeekNumber);
-        }
-        while (tempDate.compareTo(lastDate) <= 0);
-
-        chartData.add(series); // Add the series to the observable list
-    }
-
-    private void xAxis_Month() {
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
-
-        LocalDate tempDate = dateFrom.getValue();
-        LocalDate lastDate = dateTo.getValue();
-        Month currentMonth;
-        String monthName;
-
-        do {
-            currentMonth = tempDate.getMonth();
-            monthName = currentMonth + " " + tempDate.getYear();
-            series.getData().add(new XYChart.Data<>(monthName, getSalesOnMonth(tempDate)));
-
-            do {
-                tempDate = tempDate.plusDays(1);
-            } while (tempDate.getMonth() == currentMonth);
-        }
-        while (tempDate.compareTo(lastDate) <= 0);
-
-        chartData.add(series); // Add the series to the observable list
-    }
-
-    private void xAxis_Year() {
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
-
-        int firstYear = dateFrom.getValue().getYear();
-        int lastYear = dateTo.getValue().getYear();
-        int tempYear = firstYear;
-
-        do {
-            series.getData().add(new XYChart.Data<>(String.valueOf(tempYear), getSalesOnYear(tempYear)));
-            tempYear++;
-        }
-        while (tempYear <= lastYear);
-
-        chartData.add(series); // Add the series to the observable list
-
-    }
-
+    // Takes warning message as input and makes pop-up on screen
     private void showAlert(String text) {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -255,10 +169,6 @@ public class statisticsHandler extends VBox {
         alert.setHeaderText(text);
 
         alert.showAndWait();
-    }
-
-    private int getWeekNumber(LocalDate date) {
-        return date.get(WeekFields.of(new Locale("US")).weekOfWeekBasedYear());
     }
 
     // Gets list of all products from database
@@ -281,6 +191,7 @@ public class statisticsHandler extends VBox {
         return products;
     }
 
+    // Gets all relevant data from database and stores in observable list to be displayed in chart
     private void fetchData() {
 
         DB.selectSQL("SELECT tblProductReceipt.fldQuantity, tblProduct.fldName, CAST(tblReceipt.fldDate AS DATE)\n" +
@@ -296,83 +207,14 @@ public class statisticsHandler extends VBox {
             if (data.equals(DB.NOMOREDATA)) {
                 break;
             } else {
-                allProductSales.add(new Product(Integer.parseInt(data),DB.getData(),LocalDate.parse(DB.getData(),formatter)));
+                allData.add(new Product(Integer.parseInt(data), DB.getData(), LocalDate.parse(DB.getData(), formatter)));
             }
         } while (true);
 
-        Collections.sort(allProductSales);
+        Collections.sort(allData);
     }
 
-    private int getSalesOnDay(LocalDate date){
-
-        int totalSales = 0;
-
-        for (Product p : allProductSales){
-            if(p.date.compareTo(date) == 0){
-
-                if(currentProduct.equals("All")){
-                    totalSales += p.quantity;
-                }
-                else if(currentProduct.equals(p.name)){
-                    totalSales += p.quantity;
-                }
-            }
-        }
-
-        return totalSales;
-    }
-
-    private int getSalesOnWeek(LocalDate date){
-        int totalSales = 0;
-
-        for (Product p : allProductSales){
-            if(p.date.getYear() == date.getYear() && getWeekNumber(p.date) == getWeekNumber(date)){
-
-                if(currentProduct.equals("All")){
-                    totalSales += p.quantity;
-                }
-                else if(currentProduct.equals(p.name)){
-                    totalSales += p.quantity;
-                }
-            }
-        }
-        return totalSales;
-    }
-
-    private int getSalesOnMonth(LocalDate date){
-        int totalSales = 0;
-
-        for (Product p : allProductSales){
-            if(p.date.getYear() == date.getYear() && p.date.getMonthValue() == date.getMonthValue()){
-
-                if(currentProduct.equals("All")){
-                    totalSales += p.quantity;
-                }
-                else if(currentProduct.equals(p.name)){
-                    totalSales += p.quantity;
-                }
-            }
-        }
-        return totalSales;
-    }
-
-    private int getSalesOnYear(int year){
-        int totalSales = 0;
-
-        for (Product p : allProductSales){
-            if(p.date.getYear() == year){
-
-                if(currentProduct.equals("All")){
-                    totalSales += p.quantity;
-                }
-                else if(currentProduct.equals(p.name)){
-                    totalSales += p.quantity;
-                }
-            }
-        }
-        return totalSales;
-    }
-
+    // Method fetchData stores all data as products
     private class Product implements Comparable<Product> {
 
         private int quantity;
@@ -391,8 +233,183 @@ public class statisticsHandler extends VBox {
         }
     }
 
-    private interface showDataStrategy{
-        
+    // Strategy pattern interface. Makes it possible for program to update chart differently according to user input
+    private interface showDataStrategy {
+        void updateChart();
+    }
+
+    private class dayStrategy implements showDataStrategy {
+
+        @Override
+        public void updateChart() {
+
+            XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
+
+            LocalDate tempDate = dateFrom.getValue();
+
+            do {
+                // Convert LocalDate to Date
+                Date date = Date.from(tempDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                // Determine the day of the week for display on x-axis
+                String dayName = new SimpleDateFormat("EEEE").format(date) + " - " + tempDate.getDayOfMonth() + "/" + tempDate.getMonthValue();
+                // Add data to the series
+                series.getData().add(new XYChart.Data<>(dayName, getSales(tempDate)));
+
+                tempDate = tempDate.plusDays(1);
+
+            } while (tempDate.compareTo(dateTo.getValue()) <= 0);  // Until the whole chosen period is covered
+
+            filteredData.add(series); // Add the series to the observable list
+        }
+
+        private int getSales(LocalDate date) {
+
+            int totalSales = 0;
+
+            for (Product p : allData) {
+                if (p.date.compareTo(date) == 0) {
+
+                    if (currentProduct.equals("All")) {
+                        totalSales += p.quantity;
+                    } else if (currentProduct.equals(p.name)) {
+                        totalSales += p.quantity;
+                    }
+                }
+            }
+
+            return totalSales;
+        }
+
+    }
+
+    private class weekStrategy implements showDataStrategy {
+
+        @Override
+        public void updateChart() {
+
+            XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
+
+            LocalDate tempDate = dateFrom.getValue();
+            LocalDate lastDate = dateTo.getValue();
+            int currentWeekNumber;
+            String weekName;
+
+            do {
+                currentWeekNumber = getWeekNumber(tempDate);
+                weekName = "Week " + getWeekNumber(tempDate) + " " + tempDate.getYear();
+                series.getData().add(new XYChart.Data<>(weekName, getSales(tempDate)));
+
+                do {
+                    tempDate = tempDate.plusDays(1);
+                } while (getWeekNumber(tempDate) == currentWeekNumber);
+            }
+            while (tempDate.compareTo(lastDate) <= 0);
+
+            filteredData.add(series); // Add the series to the observable list
+        }
+
+        private int getSales(LocalDate date) {
+            int totalSales = 0;
+
+            for (Product p : allData) {
+                if (p.date.getYear() == date.getYear() && getWeekNumber(p.date) == getWeekNumber(date)) {
+
+                    if (currentProduct.equals("All")) {
+                        totalSales += p.quantity;
+                    } else if (currentProduct.equals(p.name)) {
+                        totalSales += p.quantity;
+                    }
+                }
+            }
+            return totalSales;
+        }
+
+        // Returns week number from a date
+        private int getWeekNumber(LocalDate date) {
+            return date.get(WeekFields.of(new Locale("US")).weekOfWeekBasedYear());
+        }
+
+
+    }
+
+    private class monthStrategy implements showDataStrategy {
+
+        @Override
+        public void updateChart() {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
+
+            LocalDate tempDate = dateFrom.getValue();
+            LocalDate lastDate = dateTo.getValue();
+            Month currentMonth;
+            String monthName;
+
+            do {
+                currentMonth = tempDate.getMonth();
+                monthName = currentMonth + " " + tempDate.getYear();
+                series.getData().add(new XYChart.Data<>(monthName, getSales(tempDate)));
+
+                do {
+                    tempDate = tempDate.plusDays(1);
+                } while (tempDate.getMonth() == currentMonth);
+            }
+            while (tempDate.compareTo(lastDate) <= 0);
+
+            filteredData.add(series); // Add the series to the observable list
+        }
+
+        private int getSales(LocalDate date) {
+
+            int totalSales = 0;
+
+            for (Product p : allData) {
+                if (p.date.getYear() == date.getYear() && p.date.getMonthValue() == date.getMonthValue()) {
+
+                    if (currentProduct.equals("All")) {
+                        totalSales += p.quantity;
+                    } else if (currentProduct.equals(p.name)) {
+                        totalSales += p.quantity;
+                    }
+                }
+            }
+            return totalSales;
+        }
+    }
+
+    private class yearStrategy implements showDataStrategy {
+
+        @Override
+        public void updateChart() {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
+
+            int firstYear = dateFrom.getValue().getYear();
+            int lastYear = dateTo.getValue().getYear();
+            int tempYear = firstYear;
+
+            do {
+                series.getData().add(new XYChart.Data<>(String.valueOf(tempYear), getSales(LocalDate.of(tempYear, 1, 1))));
+                tempYear++;
+            }
+            while (tempYear <= lastYear);
+
+            filteredData.add(series); // Add the series to the observable list
+        }
+
+        private int getSales(LocalDate date) {
+
+            int totalSales = 0;
+
+            for (Product p : allData) {
+                if (p.date.getYear() == date.getYear()) {
+
+                    if (currentProduct.equals("All")) {
+                        totalSales += p.quantity;
+                    } else if (currentProduct.equals(p.name)) {
+                        totalSales += p.quantity;
+                    }
+                }
+            }
+            return totalSales;
+        }
     }
 
 

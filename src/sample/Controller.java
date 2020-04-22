@@ -17,7 +17,7 @@ public class Controller implements Initializable {
 
         statisticsHandler sh = statisticsHandler.getInstance();
         TransactionsHandler th = TransactionsHandler.getInstance();
-        stackPane.getChildren().add(th);
+        stackPane.getChildren().add(sh);
 
     }
 }
