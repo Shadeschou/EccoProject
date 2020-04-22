@@ -390,7 +390,10 @@ public class statisticsHandler extends VBox {
             return this.date.compareTo(o.date);
         }
     }
-    
+
+    private interface showDataStrategy{
+        
+    }
 
 
 }
