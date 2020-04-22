@@ -19,9 +19,7 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Random;
+import java.util.*;
 
 public class statisticsHandler extends VBox {
 
@@ -30,10 +28,13 @@ public class statisticsHandler extends VBox {
     private Method updateMethod;                        // References current method associated with selected radio button (day, week, etc.)
     private DatePicker dateFrom;
     private DatePicker dateTo;
-    private String currentProduct;
+    private String currentProduct = "All";
+    private ArrayList<Product> allProductSales = new ArrayList<>();
     private ObservableList<XYChart.Series<String, Number>> chartData = FXCollections.observableArrayList();  // Data for chart
 
     private statisticsHandler() {
+
+        fetchData();
 
         HBox margin = new HBox();
         margin.setPrefHeight(100);
@@ -166,7 +167,6 @@ public class statisticsHandler extends VBox {
         XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
 
         LocalDate tempDate = dateFrom.getValue();
-        Random ran = new Random();
 
         do {
             // Convert LocalDate to Date
@@ -174,22 +174,18 @@ public class statisticsHandler extends VBox {
             // Determine the day of the week for display on x-axis
             String dayName = new SimpleDateFormat("EEEE").format(date) + " - " + tempDate.getDayOfMonth() + "/" + tempDate.getMonthValue();
             // Add data to the series
-            series.getData().add(new XYChart.Data<>(dayName, ran.nextInt(50)));
+            series.getData().add(new XYChart.Data<>(dayName, getSalesOnDay(tempDate)));
 
             tempDate = tempDate.plusDays(1);
 
         } while (tempDate.compareTo(dateTo.getValue()) <= 0);  // Until the whole chosen period is covered
 
         chartData.add(series); // Add the series to the observable list
-
-        fetchData();
-
     }
 
     private void xAxis_Week() {
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
-        Random ran = new Random();
 
         LocalDate tempDate = dateFrom.getValue();
         LocalDate lastDate = dateTo.getValue();
@@ -199,7 +195,7 @@ public class statisticsHandler extends VBox {
         do {
             currentWeekNumber = getWeekNumber(tempDate);
             weekName = "Week " + getWeekNumber(tempDate) + " " + tempDate.getYear();
-            series.getData().add(new XYChart.Data<>(weekName, ran.nextInt(30)));
+            series.getData().add(new XYChart.Data<>(weekName, getSalesOnWeek(tempDate)));
 
             do {
                 tempDate = tempDate.plusDays(1);
@@ -213,7 +209,6 @@ public class statisticsHandler extends VBox {
     private void xAxis_Month() {
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
-        Random ran = new Random();
 
         LocalDate tempDate = dateFrom.getValue();
         LocalDate lastDate = dateTo.getValue();
@@ -223,7 +218,7 @@ public class statisticsHandler extends VBox {
         do {
             currentMonth = tempDate.getMonth();
             monthName = currentMonth + " " + tempDate.getYear();
-            series.getData().add(new XYChart.Data<>(monthName, ran.nextInt(30)));
+            series.getData().add(new XYChart.Data<>(monthName, getSalesOnMonth(tempDate)));
 
             do {
                 tempDate = tempDate.plusDays(1);
@@ -237,14 +232,13 @@ public class statisticsHandler extends VBox {
     private void xAxis_Year() {
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();  // New series to be displayed
-        Random ran = new Random();
 
         int firstYear = dateFrom.getValue().getYear();
         int lastYear = dateTo.getValue().getYear();
         int tempYear = firstYear;
 
         do {
-            series.getData().add(new XYChart.Data<>(String.valueOf(tempYear), ran.nextInt(30)));
+            series.getData().add(new XYChart.Data<>(String.valueOf(tempYear), getSalesOnYear(tempYear)));
             tempYear++;
         }
         while (tempYear <= lastYear);
@@ -301,15 +295,84 @@ public class statisticsHandler extends VBox {
             if (data.equals(DB.NOMOREDATA)) {
                 break;
             } else {
-                Product p = new Product(Integer.parseInt(data),DB.getData(),LocalDate.parse(DB.getData(),formatter));
+                allProductSales.add(new Product(Integer.parseInt(data),DB.getData(),LocalDate.parse(DB.getData(),formatter)));
             }
         } while (true);
 
-        System.out.println("done");
-
+        Collections.sort(allProductSales);
     }
 
-    private class Product {
+    private int getSalesOnDay(LocalDate date){
+
+        int totalSales = 0;
+
+        for (Product p : allProductSales){
+            if(p.date.compareTo(date) == 0){
+
+                if(currentProduct.equals("All")){
+                    totalSales += p.quantity;
+                }
+                else if(currentProduct.equals(p.name)){
+                    totalSales += p.quantity;
+                }
+            }
+        }
+
+        return totalSales;
+    }
+
+    private int getSalesOnWeek(LocalDate date){
+        int totalSales = 0;
+
+        for (Product p : allProductSales){
+            if(p.date.getYear() == date.getYear() && getWeekNumber(p.date) == getWeekNumber(date)){
+
+                if(currentProduct.equals("All")){
+                    totalSales += p.quantity;
+                }
+                else if(currentProduct.equals(p.name)){
+                    totalSales += p.quantity;
+                }
+            }
+        }
+        return totalSales;
+    }
+
+    private int getSalesOnMonth(LocalDate date){
+        int totalSales = 0;
+
+        for (Product p : allProductSales){
+            if(p.date.getYear() == date.getYear() && p.date.getMonthValue() == date.getMonthValue()){
+
+                if(currentProduct.equals("All")){
+                    totalSales += p.quantity;
+                }
+                else if(currentProduct.equals(p.name)){
+                    totalSales += p.quantity;
+                }
+            }
+        }
+        return totalSales;
+    }
+
+    private int getSalesOnYear(int year){
+        int totalSales = 0;
+
+        for (Product p : allProductSales){
+            if(p.date.getYear() == year){
+
+                if(currentProduct.equals("All")){
+                    totalSales += p.quantity;
+                }
+                else if(currentProduct.equals(p.name)){
+                    totalSales += p.quantity;
+                }
+            }
+        }
+        return totalSales;
+    }
+
+    private class Product implements Comparable<Product> {
 
         private int quantity;
         private String name;
@@ -319,6 +382,11 @@ public class statisticsHandler extends VBox {
             this.quantity = quantity;
             this.name = name;
             this.date = date;
+        }
+
+        @Override
+        public int compareTo(Product o) {
+            return this.date.compareTo(o.date);
         }
     }
 
