@@ -16,11 +16,8 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         statisticsHandler sh = statisticsHandler.getInstance();
-        stackPane.getChildren().add(sh);
-
-        DB.selectSQL("SELECT fldName FROM tblProduct");
-
-
+        TransactionsHandler th = TransactionsHandler.getInstance();
+        stackPane.getChildren().add(th);
 
     }
 }

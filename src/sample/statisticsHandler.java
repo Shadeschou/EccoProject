@@ -36,6 +36,7 @@ public class statisticsHandler extends VBox {
 
         fetchData();
 
+        // Temp margin
         HBox margin = new HBox();
         margin.setPrefHeight(100);
         margin.setMinHeight(100);
