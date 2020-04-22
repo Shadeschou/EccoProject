@@ -19,46 +19,51 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.*;
 
-public class statisticsHandler extends VBox {
+public class Statistics extends VBox {
 
-    private static statisticsHandler instance = null;        // Singleton that will be returned on getInstance()
-    private LineChart<String, Number> chart;                 // Chart that shows statistics
-    private showDataStrategy strategy = new dayStrategy();   // Strategy to update chart. Changes with user input
-    private DatePicker dateFrom;                            
+    private static Statistics instance = null;                // Singleton that will be returned on getInstance()
+    private showDataStrategy strategy;                        // Strategy to update chart. Changes with user input
+    private DatePicker dateFrom;
     private DatePicker dateTo;
-    private String currentProduct = "All";                    // Stores current chosen product
-    private ArrayList<Product> allData = new ArrayList<>();   // All data from the database
+    private String currentProduct;                            // Stores current chosen product
+    private ArrayList<Product> allData;                       // All data from the database
     private ObservableList<XYChart.Series<String, Number>> filteredData = FXCollections.observableArrayList();  // Data for chart filtered by user choices
 
     //Constructor
-    private statisticsHandler() {
+    private Statistics() {
 
-        fetchData();
+        strategy = new dayStrategy();    // Default update strategy set to days
+        currentProduct = "All";          // Default show sum of all products
+        fetchData();                     // Gets all data from productReceipt in database
 
         // Temp margin
         HBox margin = new HBox();
         margin.setPrefHeight(100);
         margin.setMinHeight(100);
 
-        // HBox top
+        // HBox top - Holds date pickers and product drop down menu
         HBox top = new HBox(10);
         top.setAlignment(Pos.CENTER);
         top.setMinHeight(75);
 
+        // Create and initialize product drop down menu
         Label productLabel = new Label("Product");
         ComboBox<String> chooseProduct = new ComboBox<>(getProductListFromDB());
-        chooseProduct.setValue("All");
         chooseProduct.setVisibleRowCount(10);
+        chooseProduct.setValue("All");   // Shows all products (SUM) by default
         chooseProduct.setOnAction(event -> {
+            // When a new product is chosen the value is stored and chart updates with the new info
             currentProduct = chooseProduct.getValue();
             updateChart();
         });
 
+        // Create and initialize date pickers
         Label dateFromLabel = new Label("From");
         dateFrom = new DatePicker();
+        dateFrom.setValue(LocalDate.now().minusDays(7));
+
         Label dateToLabel = new Label("To");
         dateTo = new DatePicker();
-        dateFrom.setValue(LocalDate.now().minusDays(7));
         dateTo.setValue(LocalDate.now());
 
         // Chart gets updated if user chooses a new date
@@ -92,14 +97,15 @@ public class statisticsHandler extends VBox {
         mid.setPrefHeight(1000);
         mid.setPrefWidth(2000);
 
+        // Creates chart to display data
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
-        chart = new LineChart<>(xAxis, yAxis);
+        LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
+        chart.setLegendVisible(false);
         chart.setPrefWidth(2000);
-
-        mid.getChildren().addAll(chart);
         chart.setData(filteredData);
         chart.setAnimated(false);                // Animated changes disabled because it is bugged
+        mid.getChildren().addAll(chart);
 
 
         // HBox bottom
@@ -107,6 +113,7 @@ public class statisticsHandler extends VBox {
         bot.setAlignment(Pos.CENTER);
         bot.setMinHeight(75);
 
+        // Creating toggle group to choose day, week, month or year display on chart
         ToggleGroup radioButtonGroup = new ToggleGroup();
         RadioButton rbDay = new RadioButton("Day");
         RadioButton rbWeek = new RadioButton("Week");
@@ -117,6 +124,7 @@ public class statisticsHandler extends VBox {
         rbMonth.setToggleGroup(radioButtonGroup);
         rbYear.setToggleGroup(radioButtonGroup);
 
+        // Change update strategy and update chart when a new radio button is selected
         rbDay.setOnAction(event -> {
             strategy = new dayStrategy();
             updateChart();
@@ -137,19 +145,24 @@ public class statisticsHandler extends VBox {
             updateChart();
         });
 
+        // Day is selected as default
         rbDay.setSelected(true);
 
+        // Adds radio buttons to the bottom HBox
         bot.getChildren().addAll(rbDay, rbWeek, rbMonth, rbYear);
 
+        // Adds all HBoxes to the VBox
         this.getChildren().addAll(margin, top, mid, bot);
+
+        updateChart();
 
     }
 
     // Return singleton instance
-    public static statisticsHandler getInstance() {
+    public static Statistics getInstance() {
 
         if (instance == null) {
-            instance = new statisticsHandler();
+            instance = new Statistics();
         }
 
         return instance;
@@ -194,6 +207,9 @@ public class statisticsHandler extends VBox {
     // Gets all relevant data from database and stores in observable list to be displayed in chart
     private void fetchData() {
 
+        allData = new ArrayList<>();
+
+        // Gets raw data - quantity, name, date and receipt ID
         DB.selectSQL("SELECT tblProductReceipt.fldQuantity, tblProduct.fldName, CAST(tblReceipt.fldDate AS DATE)\n" +
                 "FROM ((tblProductReceipt\n" +
                 "INNER JOIN tblProduct ON tblProductReceipt.fldProductId = tblProduct.fldProductId)\n" +
@@ -202,6 +218,7 @@ public class statisticsHandler extends VBox {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String data;
 
+        // Distributes data into objects and stores in array list
         do {
             data = DB.getData();
             if (data.equals(DB.NOMOREDATA)) {
@@ -211,6 +228,7 @@ public class statisticsHandler extends VBox {
             }
         } while (true);
 
+        // Sorts the array list by date
         Collections.sort(allData);
     }
 
@@ -309,6 +327,7 @@ public class statisticsHandler extends VBox {
         }
 
         private int getSales(LocalDate date) {
+
             int totalSales = 0;
 
             for (Product p : allData) {
@@ -328,7 +347,6 @@ public class statisticsHandler extends VBox {
         private int getWeekNumber(LocalDate date) {
             return date.get(WeekFields.of(new Locale("US")).weekOfWeekBasedYear());
         }
-
 
     }
 

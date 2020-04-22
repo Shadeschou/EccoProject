@@ -15,8 +15,8 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        statisticsHandler sh = statisticsHandler.getInstance();
-        TransactionsHandler th = TransactionsHandler.getInstance();
+        Statistics sh = Statistics.getInstance();
+        Transactions th = Transactions.getInstance();
         stackPane.getChildren().add(sh);
 
     }

@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -14,9 +13,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class TransactionsHandler extends VBox {
+public class Transactions extends VBox {
 
-    private static TransactionsHandler instance = null;
+    private static Transactions instance = null;
     private DatePicker dateFrom;
     private DatePicker dateTo;
     private TableView transactionsTable;
@@ -24,7 +23,7 @@ public class TransactionsHandler extends VBox {
     private ArrayList<Transaction> allData = new ArrayList<>();
     private ObservableList<Transaction> filteredData = FXCollections.observableArrayList();
 
-    private TransactionsHandler() {
+    private Transactions() {
 
         // Temp Margin
         HBox margin = new HBox();
@@ -100,9 +99,9 @@ public class TransactionsHandler extends VBox {
         getDisplayData();
     }
 
-    public static TransactionsHandler getInstance() {
+    public static Transactions getInstance() {
         if (instance == null) {
-            instance = new TransactionsHandler();
+            instance = new Transactions();
         }
         return instance;
     }
