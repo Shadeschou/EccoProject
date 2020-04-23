@@ -88,17 +88,21 @@ public class Controller {
 
     public void addNewProduct() {
         copyProduct();
+
         Product product = new Product(Integer.parseInt(ProductID.getText()), convertSupplierName(),
                 Integer.parseInt(orderLimitID.getText()), Integer.parseInt(stockID.getText()), Double.parseDouble(priceID.getText())
                 , nameID.getText(), image);
+
         product.addToDB();
         createProductPane();
+        clearTextfield();
     }
 
 
     public void selectImage() {
         final FileChooser fileChooser = new FileChooser();
         final File selectedFile = fileChooser.showOpenDialog(addProductPaneID.getScene().getWindow());
+
         if (selectedFile != null) {
             from = Paths.get(selectedFile.toURI());
             to = Paths.get("C:/Users/cappe/IdeaProjects/EccoProject/src/Media/" + selectedFile.getName());
@@ -110,6 +114,7 @@ public class Controller {
     public void createProductPane() {
         productPane = ProductPane.getInstance();
         showProductView();
+
         try {
             managementPane.getChildren().add(productPane);
         } catch (IllegalArgumentException e) {
@@ -120,6 +125,7 @@ public class Controller {
                 showProductInfo(button.getProductId());
             });
         }
+
         productPane.getAddButton().setOnMouseClicked(e -> {
             showAddProductPane();
         });
@@ -134,9 +140,12 @@ public class Controller {
         supplierField.setText(currentProduct.getSupplierName());
         priceField.setText(String.valueOf(currentProduct.getPrice()));
         productPicture.setImage(new Image("File:" + currentProduct.getImgPath()));
+
         if (productPicture.getImage().getException() != null) {
             productPicture.setImage(new Image(placeHolderImage));
+            currentProduct.setHasValidImage(false);
         }
+
         addProductPaneID.setVisible(false);
         productPane.setVisible(false);
         productInfo.setVisible(true);
@@ -144,7 +153,9 @@ public class Controller {
 
     public void deleteProduct() throws IOException {
         currentProduct.deleteProduct();
-        Files.delete(Path.of(currentProduct.getImgPath()));
+        if (!currentProduct.checkIfImageIsUsed() && currentProduct.hasValidImage()) {
+            Files.delete(Path.of(currentProduct.getImgPath()));
+        }
         createProductPane();
     }
 
@@ -212,6 +223,16 @@ public class Controller {
         } catch (IOException e) {
             System.out.println("Failed to Copy f ile");
         }
+    }
+
+    private void clearTextfield() {
+        ProductID.clear();
+        orderLimitID.clear();
+        stockID.clear();
+        priceID.clear();
+        nameID.clear();
+        image = placeHolderImage;
+        addProductImage.setImage(new Image(placeHolderImage));
     }
 
 }

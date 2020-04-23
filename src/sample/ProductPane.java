@@ -16,7 +16,6 @@ public class ProductPane extends TilePane {
 
     private ProductPane() {
         this.setVisible(true);
-        System.out.println("DEBUGGING START OF PRODUCTPANE CONSTRUCTOR");
         ProductButton productButton;
         String name;
         ImageView imageView;
@@ -28,7 +27,7 @@ public class ProductPane extends TilePane {
 
             name = DB.getData();
             imageView = new ImageView("File:" + DB.getData());
-            System.out.println(imageView.getImage().getUrl());
+
             if (imageView.getImage().getException() != null) {
                 imageView = new ImageView("Media/noImageIcon.png");
                 System.out.println("WARNING: NO IMG URL");
@@ -50,11 +49,9 @@ public class ProductPane extends TilePane {
         addButton = productButton;
         this.getChildren().add(productButton);
         DB.getData();
-        System.out.println("DEBUGGING END OF PRODUCTPANE CONSTRUCTOR");
     }
 
     public static ProductPane getInstance() {
-        System.out.println("DEBUGGING PRODUCTPANE - GET INSTANCE");
         if (instance != null) {
             instance.getChildren().clear();
         }

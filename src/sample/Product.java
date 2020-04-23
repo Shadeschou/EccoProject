@@ -2,12 +2,16 @@ package sample;
 
 import javafx.scene.image.ImageView;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+
 public class Product {
     private int productID;
     private int supplierID;
     private int reorderLimit;
     private int stock;
     private double price;
+    private boolean hasValidImage = true;
     private String name;
     private String imgPath;
     private String supplierName;
@@ -110,7 +114,6 @@ public class Product {
         dbString.append(",'");
         dbString.append(this.imgPath);
         dbString.append("');");
-        System.out.println(dbString);
         DB.insertSQL(dbString.toString());
     }
 
@@ -126,5 +129,26 @@ public class Product {
     public void deleteProduct() {
         DB.pendingData = false;
         DB.deleteSQL("DELETE FROM tblProduct WHERE fldProductID = " + this.productID + ";");
+    }
+
+    public boolean checkIfImageIsUsed() {
+        ArrayList<String> productIDs = new ArrayList<>();
+        DB.selectSQL("SELECT fldProductId FROM tblProduct WHERE fldImagePath ='" + this.imgPath + "';");
+        while (DB.pendingData) {
+            productIDs.add(DB.getData());
+        }
+        if (productIDs.size() > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void setHasValidImage(boolean hasValidImage) {
+        this.hasValidImage = hasValidImage;
+    }
+
+    public boolean hasValidImage() {
+        return hasValidImage;
     }
 }
