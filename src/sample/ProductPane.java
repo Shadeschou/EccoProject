@@ -1,7 +1,6 @@
 package sample;
 
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 
 import java.util.ArrayList;
@@ -12,9 +11,10 @@ public class ProductPane extends TilePane {
 
     private int numberOfButtons;
     private static ProductPane instance;
-    private final String placeHolderImage = "Media/noImageIcon.png";
+    private final String placeHolderImage = "Resources/Images/noImageIcon.png";
 
     private ProductPane() {
+        this.setStyle("-fx-background-color: white");
         this.setVisible(true);
         ProductButton productButton;
         String name;
@@ -29,7 +29,7 @@ public class ProductPane extends TilePane {
             imageView = new ImageView("File:" + DB.getData());
 
             if (imageView.getImage().getException() != null) {
-                imageView = new ImageView("Media/noImageIcon.png");
+                imageView = new ImageView("Resources/Images/noImageIcon.png");
                 System.out.println("WARNING: NO IMG URL");
             }
             id = Integer.parseInt(DB.getData());
@@ -41,7 +41,7 @@ public class ProductPane extends TilePane {
             listOfbuttons.add(productButton);
             this.getChildren().add(productButton);
         }
-        imageView = new ImageView("Media/plusIcon.png");
+        imageView = new ImageView("Resources/Images/plusIcon.png");
         imageView.setFitHeight(50);
         imageView.setFitWidth(50);
         productButton = new ProductButton("New Product", imageView, 0);
