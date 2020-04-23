@@ -17,9 +17,15 @@ import java.io.IOException;
  * @Date 20-04-2020
  **/
 
+/**
+ * IDCard is actually a new stage that is draggable, so you can scan it in the simulator.
+ * ive done high coupling between the IDCard class and the controller, because i ended up
+ * needing to initialize the ID card within the FXML of controller, and rather than splashing everything in the controller
+ * i still maintained some kind of "low" coupling.
+ */
 class IDCard {
 
-    public int idNo;
+    int idNo;
     int yPlacement;
     String role;
     double ID_xOffset = 0;

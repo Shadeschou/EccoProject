@@ -30,6 +30,15 @@ public class Product {
         this.imgPath = imgPath;
     }
 
+    /**
+     * constructor for a product that acts like the ID card, is essentially used as a draggable javafx stage
+     * that can be scanned with a custom scan area
+     *
+     * @param price     - price of product
+     * @param name      - name of product
+     * @param imgPath   - image path of product
+     * @param productID - ID of the product
+     */
     Product(double price, String name, String imgPath, int productID) {
         this.price = price;
         this.name = name;

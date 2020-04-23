@@ -47,10 +47,11 @@
                               </HBox>
                               <HBox prefHeight="402.0" prefWidth="238.0">
                                  <children>
-                                    <ListView fx:id="itemAmount" prefHeight="532.0" prefWidth="73.0" visible="false"/>
-                                    <ListView fx:id="itemNameList" prefHeight="532.0" prefWidth="172.0"
+                                    <ListView fx:id="amountOfEachProduct" prefHeight="532.0" prefWidth="73.0"
                                               visible="false"/>
-                                    <ListView fx:id="itemPriceList" prefHeight="349.0" prefWidth="93.0"
+                                    <ListView fx:id="productNameList" prefHeight="532.0" prefWidth="172.0"
+                                              visible="false"/>
+                                    <ListView fx:id="productPriceList" prefHeight="349.0" prefWidth="93.0"
                                               visible="false"/>
                                  </children>
                               </HBox>

@@ -19,10 +19,8 @@ import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -34,15 +32,14 @@ public class Controller implements Initializable {
     @FXML private Button cancelButton;
     @FXML private AnchorPane logInOptionPane;
     @FXML private AnchorPane initialCostumerPane;
-    @FXML private ListView<Double> itemPriceList;
-    @FXML private ListView<String> itemNameList;
+    @FXML private ListView<Double> productPriceList;
+    @FXML private ListView<String> productNameList;
     @FXML private ListView<String> totalList;
-    @FXML private ListView<String> totalPriceList;
-    @FXML private ListView<Integer> itemAmount;
-
+    @FXML private ListView<Double> totalPriceList;
+    @FXML private ListView<Integer> amountOfEachProduct;
     @FXML private Label confirmText;
 
-    private int total = 0;
+    private double total = 0;
     private double scannerMinY;
     private double scannerMaxY;
     private double scannerMinX;
@@ -51,34 +48,42 @@ public class Controller implements Initializable {
     private double itemScannerMaxY;
     private double itemScannerMinX;
     private double itemScannerMaxX;
-    private IDCard idCard1;
-    private IDCard idCard2;
-    private IDCard idCard3;
-    private IDCard idCard4;
-    private IDCard idCard5;
     private boolean viewingBasket = false;
     private int activeId;
 
 
-    static ArrayList<IDCard> idCardArrayList = new ArrayList<IDCard>();
-    static ArrayList<Product> productsArrayList = new ArrayList<Product>();
-    static ObservableList<String> products = FXCollections.observableArrayList();
-    static ObservableList<Double> prices = FXCollections.observableArrayList();
-    static ObservableList<String> totalString = FXCollections.observableArrayList();
-    static ObservableList<String> totalPrice = FXCollections.observableArrayList();
-    static ObservableList<Integer> amounts = FXCollections.observableArrayList();
-    static ArrayList<String> currentBasket = new ArrayList<String>();
+    private static ArrayList<IDCard> idCardArrayList = new ArrayList<>();
+    private static ArrayList<Product> productsArrayList = new ArrayList<>();
+    private static ObservableList<String> productsInShoppingCart = FXCollections.observableArrayList();
+    private static ObservableList<Double> prices = FXCollections.observableArrayList();
+    private static ObservableList<String> totalStringText = FXCollections.observableArrayList();
+    private static ObservableList<Double> totalPrice = FXCollections.observableArrayList();
+    private static ObservableList<Integer> quantity = FXCollections.observableArrayList();
+    private static ArrayList<String> currentShoppingCart = new ArrayList<>();
 
-
+    /**
+     * Initialize the Class with following methods / fields
+     * specific initializing chain for the program to work with the custom Scan functions implemented.
+     *
+     * @param url            - generic
+     * @param resourceBundle - generic
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        // calls other initialize methods, specific call chain for it to work.
         Platform.runLater(this::initializeScanner);
     }
 
+    /**
+     * this is the method used in initialize to perform the initializing call chain.
+     */
     private void initializeScanner() {
 
+        /*
+        will make bounds for the id Scanner and Item Scanner,
+         also put a listener on them to update location of scan area to hit
+         so you can scan an item or ID even when moving the window around
+         */
         try {
             Bounds bounds = idScanner.localToScreen(idScanner.getBoundsInLocal());
             scannerMinX = bounds.getMinX();
@@ -106,29 +111,67 @@ public class Controller implements Initializable {
                 itemScannerMaxX = bounds1.getMaxX();
                 itemScannerMaxY = bounds1.getMaxY();
             });
-            totalString.add("Total Price");
-            totalList.setItems(totalString);
+
+            /*
+            here the total price text is added in cart, also change listener for the total price
+             */
+            totalStringText.add("Total Price");
+            totalList.setItems(totalStringText);
             prices.addListener((ListChangeListener<? super Double>) change -> {
                 total = 0;
                 for (double price : prices) {
                     total += price;
                 }
                 totalPrice.clear();
-                totalPrice.add(0, String.valueOf(total));
+                totalPrice.add(0, total);
                 totalPriceList.setItems(totalPrice);
             });
+
+            /*
+            initialize the ID cards
+             */
             initializeIdCards();
         }
         catch (NullPointerException ex) {
                 /*
-                 we expect to get nullpointer as we try to use FXML which hasnt been initialized yet
-                 we get around this by using the Platform.runlater, and accept that we get nullpointers until it works
+                 we expect to get null pointer as we try to use FXML which hasn't been initialized yet
+                 we get around this by using the Platform.run later, and accept that we get null pointers until it works
                  */
         }
     }
 
+    /**
+     * initializes id cards, and shows them, then adds listeners to the ID cards.
+     */
+    private void initializeIdCards() {
+        try {
+            IDCard idCard1 = new IDCard("frankID.fxml", 2222);
+            idCardArrayList.add(idCard1);
+            IDCard idCard2 = new IDCard("karstenID.fxml", 1111);
+            idCardArrayList.add(idCard2);
+            IDCard idCard3 = new IDCard("robertID.fxml", 9865);
+            idCardArrayList.add(idCard3);
+            IDCard idCard4 = new IDCard("kasperID.fxml", 4951);
+            idCardArrayList.add(idCard4);
+            IDCard idCard5 = new IDCard("jacobID.fxml", 3546);
+            idCardArrayList.add(idCard5);
+            showIDs();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        addListenersToID();
+    }
+
+
+    /**
+     * this method will get a product from the DB
+     * then create a product with a draggable stage that can be scanned
+     * ultimately shows product
+     */
     private void getProductFromDB() {
 
+        // query the DB for informations and declare variables to be used
         DB.selectSQL("SELECT COUNT(*) FROM tblProduct");
         int noOfRows = Integer.parseInt(DB.getData());
         DB.selectSQL("SELECT fldPrice,fldName,fldImagePath,fldProductId,fldStock FROM tblProduct");
@@ -138,6 +181,7 @@ public class Controller implements Initializable {
         int productId;
         int amountInStock;
 
+        //for each row (product in db) create a draggable stage that can be scanned as an item
         for (int i = 0; i < noOfRows; i++) {
             price = Integer.parseInt(DB.getData());
             name = DB.getData();
@@ -145,19 +189,33 @@ public class Controller implements Initializable {
             productId = Integer.parseInt(DB.getData());
             amountInStock = Integer.parseInt(DB.getData());
             if (amountInStock > 0) {
-                createScannableProduct(price, name, imgPath, productId, amountInStock);
+                createProductWithStage(price, name, imgPath, productId, amountInStock);
             }
         }
+        // will display products
         showProducts();
     }
 
-    public void createScannableProduct(double price, String name, String imgPath, int productId, int amountInStock) {
+    /**
+     * this creates a product with a draggable stage so it can be scanned
+     *
+     * @param price         - price of product
+     * @param name          - name of product
+     * @param imgPath       - image path
+     * @param productId     - id of product
+     * @param amountInStock - amount in stock of the product
+     */
+    private void createProductWithStage(double price, String name, String imgPath, int productId, int amountInStock) {
         Product product = new Product(price, name, imgPath, productId);
         product.setStock(amountInStock);
         productsArrayList.add(product);
         addListenersToProducts();
     }
 
+    /**
+     * add listeners to the product created
+     * these listeners will detect collision with a scan area
+     */
     private void addListenersToProducts() {
         for (Product product : productsArrayList) {
             product.ID_SCENE.setOnMousePressed(event -> {
@@ -171,40 +229,51 @@ public class Controller implements Initializable {
                     for (Product product1 : productsArrayList) {
                         product1.stage.close();
                     }
-                    addToBasket(product);
-                    showProducts();
+                    addToShoppingCart(product); //if scanned area hit, add to basked
+                    showProducts(); //reshow products
                 }
             });
         }
 
     }
 
-    private void addToBasket(Product productToAdd) {
-        productToAdd.setStock(productToAdd.getStock() - 1);
+    /**
+     * adds a product to the shopping cart
+     *
+     * @param productToAdd - the product you wish to add
+     */
+    private void addToShoppingCart(Product productToAdd) {
+        productToAdd.setStock(
+                productToAdd.getStock() - 1); // decrease the stock - this is done later in DB, isn't purchased yet
         String productName = productToAdd.getName();
         double productPrice = productToAdd.getPrice();
 
-        if (!currentBasket.contains(productName)) {
-            amounts.add(1);
-            products.add(productName);
+        // if shopping cart dont contain item, add it, else increment the price and amount of the product in cart
+        if (!currentShoppingCart.contains(productName)) {
+            quantity.add(1);
+            productsInShoppingCart.add(productName);
             prices.add(productPrice);
-            currentBasket.add(productName);
+            currentShoppingCart.add(productName);
         }
         else {
-            for (String product : currentBasket) {
+            for (String product : currentShoppingCart) {
                 if (productName.equalsIgnoreCase(product)) {
-                    int indexOfProduct = products.indexOf(productName);
-                    amounts.set(indexOfProduct, amounts.get(indexOfProduct) + 1);
+                    int indexOfProduct = productsInShoppingCart.indexOf(productName);
+                    quantity.set(indexOfProduct, quantity.get(indexOfProduct) + 1);
                     prices.set(indexOfProduct, prices.get(indexOfProduct) + productPrice);
                     break;
                 }
             }
         }
-        itemAmount.setItems(amounts);
-        itemNameList.setItems(products);
-        itemPriceList.setItems(prices);
+        amountOfEachProduct.setItems(quantity);
+        productNameList.setItems(productsInShoppingCart);
+        productPriceList.setItems(prices);
     }
 
+
+    /**
+     *just used to show the checkoutPane, and to view the IDcard used to log in, which can be used to confirm purchase
+     */
     public void showCheckoutPane() {
 
         productsArrayList.forEach(product -> product.stage.close());
@@ -222,38 +291,24 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * clears a cart if costumer dont want items/want to redo their orders
+     */
     public void clearCart() {
-
-
         for (Product product : productsArrayList) {
             product.stage.close();
         }
         clearSession();
         getProductFromDB();
-
-
     }
 
-    private void initializeIdCards() {
-        try {
-            idCard1 = new IDCard("frankID.fxml", 2222);
-            idCardArrayList.add(idCard1);
-            idCard2 = new IDCard("karstenID.fxml", 1111);
-            idCardArrayList.add(idCard2);
-            idCard3 = new IDCard("robertID.fxml", 9865);
-            idCardArrayList.add(idCard3);
-            idCard4 = new IDCard("kasperID.fxml", 4951);
-            idCardArrayList.add(idCard4);
-            idCard5 = new IDCard("jacobID.fxml", 3546);
-            idCardArrayList.add(idCard5);
-            showIDs();
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        addListenersToID();
-    }
 
+    /**
+     * adds listeners to ID cards, these will check for collision with scan areas.
+     * also, if confirmtext is visible - you are at the confirm purchase site.
+     * therefor i use the same listener to store a sale / finish it with transfers to DB
+     * if you dont confirm the purchase it will just log off
+     */
     private void addListenersToID() {
         for (IDCard id : idCardArrayList) {
 
@@ -293,33 +348,48 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * a lot of crap happens here essentially
+     * 1. receive the costumer ID
+     * 2. execute callableStatement to store a receipt and retrieve the receipt ID
+     * 3. for each product on the shopping cart add callableStatement to batch
+     * 4. update stock of items in the DB
+     * 5. execute batch that stores the sale in joint table between user and receipt n-m relationship
+     * 6. close connections
+     * 7. go back to start and show login screen, ready for next costumer
+     * */
     private void storeTheSale() {
         DB.pendingData = false;
-        CallableStatement cstmt;
+        CallableStatement callableStatement;
         Connection con = DB.getConnection();
         int iteratorCount = 0;
         try {
-            cstmt = con.prepareCall("{call Ecco.dbo.storeSale(?,?,?,?,?)}");
-            for (String pr : products) {
+            DB.selectSQL("SELECT fldUserId FROM tblUser WHERE fldIdCardId =" + activeId);
+            int costumerId = Integer.parseInt(DB.getData());
+            callableStatement = con.prepareCall("{call Ecco.dbo.storeReceipt(?,?,?,?)}");
+            callableStatement.setInt(1, costumerId);
+            callableStatement.setDouble(2, totalPrice.get(0));
+            callableStatement.setDate(3, java.sql.Date.valueOf(java.time.LocalDate.now()));
+            callableStatement.registerOutParameter(4, Types.INTEGER);
+            callableStatement.execute();
+            int receiptId = callableStatement.getInt(4);
+            DB.pendingData = false;
+            callableStatement = con.prepareCall("{call Ecco.dbo.storeSale(?,?,?)}");
+            for (String inCart : productsInShoppingCart) {
                 Product product = productsArrayList.get(iteratorCount);
-                cstmt.setString(1, String.valueOf(activeId));
-                cstmt.setString(2, totalPrice.get(0));
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                Date date = new Date();
-                cstmt.setString(3, dateFormat.format(date));
-                cstmt.setString(4, String.valueOf(product.getProductID()));
-                int indexOfProduct = products.indexOf(pr);
-                int quantityOfProduct = amounts.get(indexOfProduct);
-                cstmt.setString(5, String.valueOf(quantityOfProduct));
-
-                boolean results = cstmt.execute();
+                callableStatement.setInt(1, receiptId);
+                callableStatement.setInt(2, product.getProductID());
+                int indexOfProduct = productsInShoppingCart.indexOf(inCart);
+                int quantityOfProduct = quantity.get(indexOfProduct);
+                callableStatement.setInt(3, quantityOfProduct);
 
                 DB.updateSQL(
                         "UPDATE tblProduct SET fldStock = " + product.getStock() + " WHERE fldName ='" + product.getName() + "' AND fldStock>0");
-
-
+                callableStatement.addBatch();
+                iteratorCount++;
             }
-            cstmt.close();
+            int[] results = callableStatement.executeBatch();
+            callableStatement.close();
             con.close();
         }
         catch (SQLException ex) {
@@ -329,6 +399,9 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * returns to log in screen and resets session + show the ID's you can scan
+     */
     public void showLoginScreen() {
         loginBorderPane.toFront();
         if (viewingBasket) {
@@ -341,31 +414,44 @@ public class Controller implements Initializable {
         showIDs();
     }
 
+    /**
+     * clear the session, often used when going to a new pane
+     */
     private void clearSession() {
         confirmText.setVisible(false);
         cancelButton.setVisible(false);
-        currentBasket.clear();
+        currentShoppingCart.clear();
         productsArrayList.clear();
-        amounts.clear();
-        products.clear();
+        quantity.clear();
+        productsInShoppingCart.clear();
         prices.clear();
     }
 
+    /**
+     * if employee login chosen shows the employee pane
+     */
     private void showEmployeeLogIn() {
         logInOptionPane.toFront();
     }
 
+    /**
+     * if costumer login chosen/ a costumer logs in, bring you to the menu
+     * and gets the products from DB
+     */
     public void showCostumerInitialLogin() {
         initialCostumerPane.toFront();
         itemScanner.toFront();
         getProductFromDB();
     }
 
+    /**
+     * if basked shown, sets UI visible, of toggled to hide, sets UI invisible
+     */
     public void toggleBasket() {
         if (!viewingBasket) {
-            itemAmount.setVisible(true);
-            itemNameList.setVisible(true);
-            itemPriceList.setVisible(true);
+            amountOfEachProduct.setVisible(true);
+            productNameList.setVisible(true);
+            productPriceList.setVisible(true);
             totalList.setVisible(true);
             clearCartButton.setVisible(true);
             totalPriceList.setVisible(true);
@@ -374,9 +460,9 @@ public class Controller implements Initializable {
 
         }
         else {
-            itemAmount.setVisible(false);
-            itemNameList.setVisible(false);
-            itemPriceList.setVisible(false);
+            amountOfEachProduct.setVisible(false);
+            productNameList.setVisible(false);
+            productPriceList.setVisible(false);
             totalList.setVisible(false);
             totalPriceList.setVisible(false);
             checkoutButton.setVisible(false);
@@ -385,16 +471,16 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * shows products, the y/x positions is not really based on anything else than making it look neat
+     */
     private void showProducts() {
 
         int yPosition = 0;
         int iteration = 0;
         int xPosition = -100;
         for (Product product : productsArrayList) {
-            if (product.getStock() == 0) {
-                // do nothing
-            }
-            else {
+            if (product.getStock() > 0) {
                 product.stage.close();
                 switch (iteration) {
                     case 3:
@@ -416,6 +502,9 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * shows the id's, the y/x positions is not really based on anything else than making it look neat
+     */
     private void showIDs() {
         int yPosition = -80;
         for (IDCard id : idCardArrayList) {
