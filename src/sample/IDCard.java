@@ -19,7 +19,7 @@ import java.io.IOException;
 
 class IDCard {
 
-    int idNo;
+    public int idNo;
     int yPlacement;
     String role;
     double ID_xOffset = 0;

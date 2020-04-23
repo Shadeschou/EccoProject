@@ -2,26 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="init">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Robert.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/sqljdbc4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Resources/Images/appleJuice.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Resources/Images/basket.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Resources/Images/cocaCola.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Resources/Images/cupNoodles.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Resources/Images/faxeKondi.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Resources/Images/orangeJuice.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Resources/Images/scanArea.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/product.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EccoProject12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/EccoProject12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Resources/StyleSheets/Default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Resources/StyleSheets/Default.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Resources/StyleSheets/IdCards.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Resources/StyleSheets/IdCards.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DB/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/DB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/DB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/IDCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/IDCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/db.properties" beforeDir="false" afterPath="$PROJECT_DIR$/db.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/sample.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample.fxml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,6 +17,20 @@
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="DebuggerManager">
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true" converted="true">
@@ -129,10 +128,12 @@
     <property name="dynamic.classpath" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/sample" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -257,7 +258,9 @@
       <workItem from="1587377782235" duration="26085000" />
       <workItem from="1587449303849" duration="13141000" />
       <workItem from="1587555220108" duration="17000" />
-      <workItem from="1587581566823" duration="18371000" />
+      <workItem from="1587581566823" duration="18423000" />
+      <workItem from="1587621994539" duration="18819000" />
+      <workItem from="1587641471974" duration="5576000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1587361090319</created>
@@ -273,7 +276,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587390425329</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="init">
+      <created>1587600100391</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1587600100391</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,9 +326,5 @@
     <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" />
     <state x="769" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" />
     <state x="769" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" />
-  </component>
-  <component name="antWorkspaceConfiguration">
-    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
-    <option name="FILTER_TARGETS" value="false" />
   </component>
 </project>

@@ -181,6 +181,17 @@ public class DB {
         return value.toString();
     }
 
+    public static Connection getConnection() {
+        try {
+            con = DriverManager.getConnection("jdbc:sqlserver://localhost:" + port + ";databaseName=" + databaseName,
+                                              userName, password);
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return con;
+    }
+
     public static boolean insertSQL(String sql) {
         return executeUpdate(sql);
     }

@@ -1,7 +1,6 @@
 package sample;
 
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -31,7 +30,7 @@ public class Product {
         this.imgPath = imgPath;
     }
 
-    public Product(double price, String name, String imgPath, int productID) {
+    Product(double price, String name, String imgPath, int productID) {
         this.price = price;
         this.name = name;
         this.imgPath = imgPath;
