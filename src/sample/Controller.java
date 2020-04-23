@@ -82,26 +82,34 @@ public class Controller {
     public static ProductPane productPane;
     private Product currentProduct;
     String image = "";
-    private final String placeHolderImage = "Media/noImageIcon.png";
+    private final String placeHolderImage = "Resources/Images/noImageIcon.png";
     private Path to;
     private Path from;
 
     public void addNewProduct() {
-        copyProduct();
-        Product product = new Product(Integer.parseInt(ProductID.getText()), convertSupplierName(),
-                Integer.parseInt(orderLimitID.getText()), Integer.parseInt(stockID.getText()), Double.parseDouble(priceID.getText())
-                , nameID.getText(), image);
-        product.addToDB();
+        try {
+            if (to!=null)
+            copyProduct();
+            Product product = new Product(Integer.parseInt(ProductID.getText()), convertSupplierName(),
+                    Integer.parseInt(orderLimitID.getText()), Integer.parseInt(stockID.getText()), Double.parseDouble(priceID.getText())
+                    , nameID.getText(), image);
+            product.addToDB();
+        } catch (NullPointerException e){
+            System.out.println("NO infomation to Product to be created");
+        }
+
         createProductPane();
+        clearTextfield();
     }
 
 
     public void selectImage() {
         final FileChooser fileChooser = new FileChooser();
         final File selectedFile = fileChooser.showOpenDialog(addProductPaneID.getScene().getWindow());
+
         if (selectedFile != null) {
             from = Paths.get(selectedFile.toURI());
-            to = Paths.get("C:/Users/cappe/IdeaProjects/EccoProject/src/Media/" + selectedFile.getName());
+            to = Paths.get("C:/Users/cappe/IdeaProjects/EccoProject/src/Resources/Images" + selectedFile.getName());
             addProductImage.setImage(new Image("File:" + from));
         }
 
@@ -109,7 +117,9 @@ public class Controller {
 
     public void createProductPane() {
         productPane = ProductPane.getInstance();
+        productPane.setStyle("-fx-background-color: white");
         showProductView();
+
         try {
             managementPane.getChildren().add(productPane);
         } catch (IllegalArgumentException e) {
@@ -120,6 +130,7 @@ public class Controller {
                 showProductInfo(button.getProductId());
             });
         }
+
         productPane.getAddButton().setOnMouseClicked(e -> {
             showAddProductPane();
         });
@@ -134,9 +145,12 @@ public class Controller {
         supplierField.setText(currentProduct.getSupplierName());
         priceField.setText(String.valueOf(currentProduct.getPrice()));
         productPicture.setImage(new Image("File:" + currentProduct.getImgPath()));
+
         if (productPicture.getImage().getException() != null) {
             productPicture.setImage(new Image(placeHolderImage));
+            currentProduct.setHasValidImage(false);
         }
+
         addProductPaneID.setVisible(false);
         productPane.setVisible(false);
         productInfo.setVisible(true);
@@ -144,7 +158,9 @@ public class Controller {
 
     public void deleteProduct() throws IOException {
         currentProduct.deleteProduct();
-        Files.delete(Path.of(currentProduct.getImgPath()));
+        if (!currentProduct.checkIfImageIsUsed() && currentProduct.hasValidImage()) {
+            Files.delete(Path.of(currentProduct.getImgPath()));
+        }
         createProductPane();
     }
 
@@ -166,8 +182,6 @@ public class Controller {
     private void showProductView() {
         productPane.setVisible(true);
         productPane.toFront();
-        productInfo.setVisible(false);
-        addProductPaneID.setVisible(false);
     }
 
     private int convertSupplierName() {
@@ -205,13 +219,38 @@ public class Controller {
         popup.show(productInfo.getScene().getWindow());
     }
 
+    public void showStatics(){
+        if (!managementPane.getChildren().contains(Statistics.getInstance())) {
+            managementPane.getChildren().add(Statistics.getInstance());
+        }
+        Statistics.getInstance().toFront();
+    }
+
+    public void showTransactions(){
+        if (!managementPane.getChildren().contains(Transactions.getInstance())){
+            managementPane.getChildren().add(Transactions.getInstance());
+        }
+        Transactions.getInstance().toFront();
+    }
+
     private void copyProduct() {
         try {
             Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
             image = to.toString();
+            to=null;
         } catch (IOException e) {
             System.out.println("Failed to Copy f ile");
         }
+    }
+
+    private void clearTextfield() {
+        ProductID.clear();
+        orderLimitID.clear();
+        stockID.clear();
+        priceID.clear();
+        nameID.clear();
+        image = placeHolderImage;
+        addProductImage.setImage(new Image(placeHolderImage));
     }
 
 }

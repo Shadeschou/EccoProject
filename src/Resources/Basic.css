@@ -1,4 +1,7 @@
-#pane {
+.root {
+    -fx-border-color: white;
+}
+.pane {
     -fx-background-color: white;
 }
 
