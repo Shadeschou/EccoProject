@@ -2,21 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="init">
-      <change afterPath="$PROJECT_DIR$/sqljdbc4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/DB.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/db.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/jacobID.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/kasperID.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/robertID.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Robert.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/sqljdbc4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Resources/Images/appleJuice.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Resources/Images/basket.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Resources/Images/cocaCola.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Resources/Images/cupNoodles.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Resources/Images/faxeKondi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Resources/Images/orangeJuice.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Resources/Images/scanArea.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/product.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EccoProject12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/EccoProject12.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Resources/StyleSheets/Default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Resources/StyleSheets/Default.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Resources/StyleSheets/IdCards.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Resources/StyleSheets/IdCards.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/DB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/IDCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/IDCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/ScanHead.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/frankID.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/frankID.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/karstenID.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/karstenID.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/db.properties" beforeDir="false" afterPath="$PROJECT_DIR$/db.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/sample.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample.fxml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -118,14 +123,15 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="OverrideImplement.combined" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dynamic.classpath" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/sample" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
   </component>
   <component name="RecentsManager">
@@ -138,11 +144,11 @@
       <recent name="sample" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Rober\IdeaProjects\EccoProject\src\Resources\Images" />
+      <recent name="C:\Users\Rober\IdeaProjects\EccoProject" />
+      <recent name="C:\Users\Rober\IdeaProjects\EccoProject\src\DB" />
       <recent name="C:\Users\Rober\IdeaProjects\EccoProject\src\sample" />
       <recent name="C:\Users\Rober\IdeaProjects\EccoProject\src\sample\idCardFXML" />
-      <recent name="C:\Users\Rober\IdeaProjects\EccoProject" />
-      <recent name="C:\Users\Rober\IdeaProjects\EccoProject\src" />
-      <recent name="C:\Users\Rober\IdeaProjects\EccoProject\src\Resources\StyleSheets" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -249,6 +255,9 @@
       <workItem from="1587360867836" duration="322000" />
       <workItem from="1587365949465" duration="1733000" />
       <workItem from="1587377782235" duration="26085000" />
+      <workItem from="1587449303849" duration="13141000" />
+      <workItem from="1587555220108" duration="17000" />
+      <workItem from="1587581566823" duration="18371000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1587361090319</created>

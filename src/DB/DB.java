@@ -1,4 +1,4 @@
-package sample;
+package DB;
 
 import java.io.FileInputStream;
 import java.io.IOException;
