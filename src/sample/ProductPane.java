@@ -28,7 +28,7 @@ public class ProductPane extends TilePane {
         for (int i = 0; i < numberOfButtons; i++) {
 
             name = DB.getData();
-            imageView = new ImageView( DB.getData());
+            imageView = new ImageView("file:" + DB.getData());
 
             if (imageView.getImage().getException() != null) {
                 imageView = new ImageView(placeHolderImage);

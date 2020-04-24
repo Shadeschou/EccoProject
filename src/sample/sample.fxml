@@ -15,33 +15,41 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" stylesheets="@../Resources/StyleSheets/Basic.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-   <children>
-      <VBox prefHeight="682.0" prefWidth="1024.0">
-         <children>
-            <HBox alignment="CENTER" prefHeight="124.0" prefWidth="979.0" style="-fx-background-color: #1a163d;">
-               <children>
-                  <Label text="ECCO" textFill="WHITE">
-                     <font>
-                        <Font size="38.0" />
-                     </font>
-                  </Label>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0"
+           prefWidth="1024.0" stylesheets="@../Resources/StyleSheets/Basic.css" xmlns="http://javafx.com/javafx/8.0.171"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <children>
+        <VBox prefHeight="682.0" prefWidth="1024.0">
+            <children>
+                <HBox alignment="CENTER" prefHeight="124.0" prefWidth="979.0" style="-fx-background-color: #1a163d;">
+                    <children>
+                        <Label text="ECCO" textFill="WHITE">
+                            <font>
+                                <Font size="38.0"/>
+                            </font>
+                        </Label>
                </children>
             </HBox>
             <StackPane prefHeight="659.0" prefWidth="936.0">
                <children>
-                   <HBox fx:id="inventoryPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="666.0" prefWidth="1048.0" style="-fx-background-color: white;">
+                   <HBox fx:id="inventoryPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="689.0"
+                         prefWidth="1027.0" style="-fx-background-color: white;">
                        <children>
-                           <VBox alignment="TOP_CENTER" prefHeight="683.0" prefWidth="209.0" styleClass="Menu-Pane" stylesheets="@../Resources/StyleSheets/Basic.css">
+                           <VBox alignment="TOP_CENTER" prefHeight="675.0" prefWidth="110.0" styleClass="Menu-Pane"
+                                 stylesheets="@../Resources/StyleSheets/Basic.css">
                                <children>
-                                   <Button mnemonicParsing="false" onAction="#createProductPane" prefHeight="43.0" prefWidth="109.0" styleClass="menu-button" stylesheets="@../Resources/StyleSheets/Basic.css" text="Inventory">
+                                   <Button mnemonicParsing="false" onAction="#createProductPane" prefHeight="43.0"
+                                           prefWidth="109.0" styleClass="menu-button"
+                                           stylesheets="@../Resources/StyleSheets/Basic.css" text="Inventory">
                                        <VBox.margin>
-                                           <Insets top="20.0" />
+                                           <Insets top="20.0"/>
                                        </VBox.margin>
                                    </Button>
-                                   <Button layoutX="35.0" layoutY="10.0" mnemonicParsing="false" onAction="#showTransactions" styleClass="menu-button" stylesheets="@../Resources/StyleSheets/Basic.css" text="Transactions">
+                                   <Button layoutX="35.0" layoutY="10.0" mnemonicParsing="false"
+                                           onAction="#showTransactions" styleClass="menu-button"
+                                           stylesheets="@../Resources/StyleSheets/Basic.css" text="Transactions">
                                        <VBox.margin>
-                                           <Insets top="10.0" />
+                                           <Insets top="10.0"/>
                                        </VBox.margin>
                                    </Button>
                                    <Button layoutX="35.0" layoutY="10.0" mnemonicParsing="false" onAction="#showStatics" prefHeight="25.0" prefWidth="82.0" styleClass="menu-button" stylesheets="@../Resources/StyleSheets/Basic.css" text="statistics">
