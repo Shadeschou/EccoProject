@@ -414,7 +414,7 @@ public class Controller implements Initializable {
      * 6. close connections
      * 7. go back to start and show login screen, ready for next costumer
      * */
-    private void storeTheSale() {
+    public void storeTheSale() {
         DB.pendingData = false;
         CallableStatement callableStatement;
         Connection con = DB.getConnection();
