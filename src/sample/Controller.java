@@ -85,6 +85,7 @@ public class Controller implements Initializable {
     @FXML private Label userBalance;
 
     private double total = 0;
+    private double tempBalance;
     private double scannerMinY;
     private double scannerMaxY;
     private double scannerMinX;
@@ -294,8 +295,8 @@ public class Controller implements Initializable {
      */
     private void addToShoppingCart(Product productToAdd) {
         notEnoughMoneyField.setVisible(false);
-        if (activeId.getBalance() >= productToAdd.getPrice()) {
-            activeId.setBalance(activeId.getBalance()-productToAdd.getPrice());
+        if (tempBalance >= productToAdd.getPrice()) {
+          tempBalance -=productToAdd.getPrice();
             productToAdd.setStock(
                     productToAdd.getStock() - 1); // decrease the stock - this is done later in DB, isn't purchased yet
             String productName = productToAdd.getName();
@@ -353,6 +354,7 @@ public class Controller implements Initializable {
         for (Product product : productsArrayList) {
             product.stage.close();
         }
+        tempBalance= activeId.getBalance();
         clearSession();
         getProductFromDB();
     }
@@ -444,6 +446,8 @@ public class Controller implements Initializable {
                 callableStatement.addBatch();
                 iteratorCount++;
             }
+            activeId.setBalance(tempBalance);
+            DB.updateSQL("UPDATE tblIdCard SET fldBalance = "+activeId.getBalance()+" WHERE fldIdCardId = "+activeId.getIdNo());
             int[] results = callableStatement.executeBatch();
             callableStatement.close();
             con.close();
@@ -502,6 +506,7 @@ public class Controller implements Initializable {
     public void showCostumerInitialLogin() {
         initialCostumerPane.toFront();
         itemScanner.toFront();
+        tempBalance= activeId.getBalance();
         getProductFromDB();
     }
 
