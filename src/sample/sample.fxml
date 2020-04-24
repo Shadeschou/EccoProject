@@ -21,11 +21,30 @@
          <children>
             <HBox alignment="CENTER" prefHeight="124.0" prefWidth="979.0" style="-fx-background-color: #1a163d;">
                <children>
-                  <Label text="ECCO" textFill="WHITE">
-                     <font>
-                        <Font size="38.0" />
-                     </font>
-                  </Label>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="81.0" prefWidth="839.0">
+                     <children>
+                        <Label text="ECCO" textFill="WHITE">
+                           <font>
+                              <Font size="38.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="81.0" prefWidth="721.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#showLoginScreen" text="Log out">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                  </HBox>
                </children>
             </HBox>
             <StackPane prefHeight="659.0" prefWidth="936.0">
@@ -151,7 +170,6 @@
                                  <children>
                                     <Button fx:id="clearCartButton" mnemonicParsing="false" onAction="#clearCart" text="Clear Shopping Cart" visible="false" />
                                     <Button fx:id="shoppingCart" mnemonicParsing="false" onAction="#toggleBasket" prefHeight="39.0" prefWidth="45.0" styleClass="shoppingCart" />
-                                    <Button mnemonicParsing="false" onAction="#showLoginScreen" text="Log out" />
                                  </children>
                                  <VBox.margin>
                                     <Insets bottom="20.0" />
@@ -193,7 +211,6 @@
                               <Button mnemonicParsing="false" onAction="#showCostumerInitialLogin" prefHeight="30.0" prefWidth="150.0" text="Costumer" />
                            </children>
                         </HBox>
-                        <Button layoutX="949.0" layoutY="25.0" mnemonicParsing="false" onAction="#showLoginScreen" text="Log out" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="25.0" />
                      </children>
                   </AnchorPane>
                   <BorderPane fx:id="loginBorderPane" prefHeight="768.0" prefWidth="1020.0" styleClass="defaultPane" stylesheets="@../Resources/StyleSheets/Basic.css">
