@@ -16,6 +16,16 @@ public class Product {
     private String imgPath;
     private String supplierName;
 
+    /***
+     * constructor
+     * @param productID
+     * @param supplierID
+     * @param reorderLimit
+     * @param stock
+     * @param price
+     * @param name
+     * @param imgPath
+     */
     public Product(int productID, int supplierID, int reorderLimit, int stock, double price, String name, String imgPath) {
         this.productID = productID;
         this.supplierID = supplierID;
@@ -26,6 +36,10 @@ public class Product {
         this.imgPath = imgPath;
     }
 
+    /***
+     * overloaded constructor using only the ProductID to fetch all the data
+     * @param productID
+     */
     public Product(int productID) {
         DB.selectSQL("SELECT * FROM tblProduct WHERE fldProductID = " + productID + ";");
         this.productID = Integer.parseInt(DB.getData());
@@ -97,6 +111,9 @@ public class Product {
         this.imgPath = imgPath;
     }
 
+    /***
+     * stringbuilder that adds the product to DB
+     */
     public void addToDB() {
         StringBuilder dbString = new StringBuilder();
         dbString.append("INSERT INTO tblProduct (fldProductId, fldStock, fldName, fldSupplierId, fldReorderLimit, fldPrice,fldImagePath) VALUES (");
@@ -121,16 +138,27 @@ public class Product {
         return supplierName;
     }
 
+    /***
+     * updates the amount and adds it to DB
+     * @param amount
+     */
     public void updateStock(int amount) {
         amount += this.stock;
         DB.updateSQL("UPDATE tblProduct SET fldStock =" + amount + "  WHERE fldProductId = " + this.productID + ";");
     }
 
+    /***
+     * deletes product from DB
+     */
     public void deleteProduct() {
         DB.pendingData = false;
         DB.deleteSQL("DELETE FROM tblProduct WHERE fldProductID = " + this.productID + ";");
     }
 
+    /***
+     * checks if any other products in the DB uses that image
+     * @return
+     */
     public boolean checkIfImageIsUsed() {
         ArrayList<String> productIDs = new ArrayList<>();
         DB.selectSQL("SELECT fldProductId FROM tblProduct WHERE fldImagePath ='" + this.imgPath + "';");

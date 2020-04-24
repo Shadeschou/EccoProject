@@ -6,9 +6,8 @@ import javafx.scene.layout.TilePane;
 import java.util.ArrayList;
 
 public class ProductPane extends TilePane {
-    ArrayList<ProductButton> listOfbuttons = new ArrayList<>();
-    ProductButton addButton;
-
+    private ArrayList<ProductButton> listOfbuttons = new ArrayList<>();
+    private ProductButton addButton;
     private int numberOfButtons;
     private static ProductPane instance;
     private final String placeHolderImage = "Resources/Images/noImageIcon.png";
@@ -23,6 +22,7 @@ public class ProductPane extends TilePane {
         DB.selectSQL("SELECT COUNT(fldProductId) FROM tblProduct");
         this.numberOfButtons = Integer.parseInt(DB.getData());
         DB.selectSQL("SELECT fldName, fldImagePath, fldProductId FROM tblProduct;");
+
         for (int i = 0; i < numberOfButtons; i++) {
 
             name = DB.getData();
@@ -41,6 +41,7 @@ public class ProductPane extends TilePane {
             listOfbuttons.add(productButton);
             this.getChildren().add(productButton);
         }
+
         imageView = new ImageView("Resources/Images/plusIcon.png");
         imageView.setFitHeight(50);
         imageView.setFitWidth(50);
@@ -51,6 +52,10 @@ public class ProductPane extends TilePane {
         DB.getData();
     }
 
+    /***
+     * Singleton getinstance
+     * @return
+     */
     public static ProductPane getInstance() {
         if (instance != null) {
             instance.getChildren().clear();

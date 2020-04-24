@@ -13,7 +13,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         Scene scene = new Scene(root, 1024, 768);
         scene.getStylesheets().add("Resources/Basic.css");
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Ecco Canteen Service");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

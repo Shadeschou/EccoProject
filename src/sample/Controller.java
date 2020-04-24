@@ -86,15 +86,18 @@ public class Controller {
     private Path to;
     private Path from;
 
+    /***
+     * creates a new product object and adds it to the DB
+     */
     public void addNewProduct() {
         try {
-            if (to!=null)
-            copyProduct();
+            if (to != null)
+                copyProduct();
             Product product = new Product(Integer.parseInt(ProductID.getText()), convertSupplierName(),
                     Integer.parseInt(orderLimitID.getText()), Integer.parseInt(stockID.getText()), Double.parseDouble(priceID.getText())
                     , nameID.getText(), image);
             product.addToDB();
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("NO infomation to Product to be created");
         }
 
@@ -102,6 +105,9 @@ public class Controller {
         clearTextfield();
     }
 
+    /***
+     * creates a filechooser which selects it's URL path
+     */
 
     public void selectImage() {
         final FileChooser fileChooser = new FileChooser();
@@ -115,6 +121,10 @@ public class Controller {
 
     }
 
+    /***
+     * creates a product pane, by getting the instance of the product pane
+     * and assigns a event to all it's buttons
+     */
     public void createProductPane() {
         productPane = ProductPane.getInstance();
         productPane.setStyle("-fx-background-color: white");
@@ -125,7 +135,7 @@ public class Controller {
         } catch (IllegalArgumentException e) {
             System.out.println("Children: duplicate children added: parent = HBox[id=managementPane] ");
         }
-        for (ProductButton button : productPane.listOfbuttons) {
+        for (ProductButton button : productPane.getListOfbuttons()) {
             button.setOnMouseClicked(e -> {
                 showProductInfo(button.getProductId());
             });
@@ -156,6 +166,10 @@ public class Controller {
         productInfo.setVisible(true);
     }
 
+    /***
+     * deletes the product from the database, and if there is a local copy of the file it deletes it too as long it's not used by other products
+     * @throws IOException
+     */
     public void deleteProduct() throws IOException {
         currentProduct.deleteProduct();
         if (!currentProduct.checkIfImageIsUsed() && currentProduct.hasValidImage()) {
@@ -192,6 +206,9 @@ public class Controller {
         return supplierID;
     }
 
+    /***
+     * increases the quantity of a product
+     */
     public void orderProduct() {
         Popup popup = new Popup();
         VBox vBox = new VBox();
@@ -219,15 +236,21 @@ public class Controller {
         popup.show(productInfo.getScene().getWindow());
     }
 
-    public void showStatics(){
+    /***
+     * shows the Statics pane and if there is no pane it  creates a new one
+     */
+    public void showStatics() {
         if (!managementPane.getChildren().contains(Statistics.getInstance())) {
             managementPane.getChildren().add(Statistics.getInstance());
         }
         Statistics.getInstance().toFront();
     }
 
-    public void showTransactions(){
-        if (!managementPane.getChildren().contains(Transactions.getInstance())){
+    /***
+     * shows the Transactioons pane and if there is no pane it  creates a new one
+     */
+    public void showTransactions() {
+        if (!managementPane.getChildren().contains(Transactions.getInstance())) {
             managementPane.getChildren().add(Transactions.getInstance());
         }
         Transactions.getInstance().toFront();
