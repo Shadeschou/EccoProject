@@ -79,6 +79,7 @@ public class Controller implements Initializable {
     @FXML private ImageView productPicture;
     @FXML private ComboBox<String> comboBox;
     @FXML private ImageView addProductImage;
+    @FXML private HBox inventoryPane;
 
     private double total = 0;
     private double scannerMinY;
@@ -382,7 +383,7 @@ public class Controller implements Initializable {
                     else {
                         activeId = id.idNo;
                         if (id.role.equalsIgnoreCase("Employee")) {
-                            showEmployeeLogIn();
+                            showEmployeeOption();
                         }
                         else {
                             showCostumerInitialLogin();
@@ -476,8 +477,12 @@ public class Controller implements Initializable {
     /**
      * if employee login chosen shows the employee pane
      */
+    private void showEmployeeOption() {
+       logInOptionPane.toFront();
+    }
+    @FXML
     private void showEmployeeLogIn() {
-        logInOptionPane.toFront();
+        inventoryPane.toFront();
     }
 
     /**
@@ -592,7 +597,7 @@ public class Controller implements Initializable {
 
         if (selectedFile != null) {
             from = Paths.get(selectedFile.toURI());
-            to = Paths.get("C:/Users/cappe/IdeaProjects/EccoProject/src/Resources/Images" + selectedFile.getName());
+            to = Paths.get(".../EccoProject/src/Resources/Images" + selectedFile.getName());
             addProductImage.setImage(new Image("File:" + from));
         }
 

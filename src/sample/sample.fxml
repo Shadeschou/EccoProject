@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.layout.BorderPane?>
 
-
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" stylesheets="@../Resources/Basic.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" stylesheets="@../Resources/StyleSheets/Basic.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <VBox prefHeight="682.0" prefWidth="1024.0">
          <children>
@@ -33,19 +32,19 @@
                <children>
                    <HBox fx:id="inventoryPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="666.0" prefWidth="1048.0" style="-fx-background-color: white;">
                        <children>
-                           <VBox alignment="TOP_CENTER" prefHeight="683.0" prefWidth="209.0" styleClass="Menu-Pane" stylesheets="@../Resources/Basic.css">
+                           <VBox alignment="TOP_CENTER" prefHeight="683.0" prefWidth="209.0" styleClass="Menu-Pane" stylesheets="@../Resources/StyleSheets/Basic.css">
                                <children>
-                                   <Button mnemonicParsing="false" onAction="#createProductPane" prefHeight="43.0" prefWidth="109.0" styleClass="menu-button" stylesheets="@../Resources/Basic.css" text="Inventory">
+                                   <Button mnemonicParsing="false" onAction="#createProductPane" prefHeight="43.0" prefWidth="109.0" styleClass="menu-button" stylesheets="@../Resources/StyleSheets/Basic.css" text="Inventory">
                                        <VBox.margin>
                                            <Insets top="20.0" />
                                        </VBox.margin>
                                    </Button>
-                                   <Button layoutX="35.0" layoutY="10.0" mnemonicParsing="false" onAction="#showTransactions" styleClass="menu-button" stylesheets="@../Resources/Basic.css" text="Transactions">
+                                   <Button layoutX="35.0" layoutY="10.0" mnemonicParsing="false" onAction="#showTransactions" styleClass="menu-button" stylesheets="@../Resources/StyleSheets/Basic.css" text="Transactions">
                                        <VBox.margin>
                                            <Insets top="10.0" />
                                        </VBox.margin>
                                    </Button>
-                                   <Button layoutX="35.0" layoutY="10.0" mnemonicParsing="false" onAction="#showStatics" prefHeight="25.0" prefWidth="82.0" styleClass="menu-button" stylesheets="@../Resources/Basic.css" text="statistics">
+                                   <Button layoutX="35.0" layoutY="10.0" mnemonicParsing="false" onAction="#showStatics" prefHeight="25.0" prefWidth="82.0" styleClass="menu-button" stylesheets="@../Resources/StyleSheets/Basic.css" text="statistics">
                                        <VBox.margin>
                                            <Insets top="10.0" />
                                        </VBox.margin>
@@ -133,7 +132,7 @@
                                            </VBox>
                                            <Button layoutX="587.0" layoutY="346.0" mnemonicParsing="false" onAction="#createProductPane" prefHeight="25.0" prefWidth="95.0" styleClass="myButton" text="Confirm" />
                                            <Button layoutX="480.0" layoutY="346.0" mnemonicParsing="false" onAction="#deleteProduct" prefHeight="25.0" prefWidth="95.0" styleClass="myButton" text="Delete" />
-                                           <Button layoutX="362.0" layoutY="346.0" mnemonicParsing="false" onAction="#orderProduct" prefHeight="25.0" prefWidth="95.0" styleClass="myButton" stylesheets="@../Resources/Basic.css" text="Order" />
+                                           <Button layoutX="362.0" layoutY="346.0" mnemonicParsing="false" onAction="#orderProduct" prefHeight="25.0" prefWidth="95.0" styleClass="myButton" stylesheets="@../Resources/StyleSheets/Basic.css" text="Order" />
                                            <ImageView fx:id="productPicture" fitHeight="176.0" fitWidth="227.0" layoutX="535.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                    </AnchorPane>
@@ -150,80 +149,62 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="47.0" prefWidth="336.0" spacing="10.0">
                                  <children>
-                                    <Button fx:id="clearCartButton" mnemonicParsing="false" onAction="#clearCart"
-                                            text="Clear Shopping Cart" visible="false"/>
-                                    <Button fx:id="shoppingCart" mnemonicParsing="false" onAction="#toggleBasket"
-                                            prefHeight="39.0" prefWidth="45.0" styleClass="shoppingCart"/>
-                                    <Button mnemonicParsing="false" onAction="#showLoginScreen" text="Log out"/>
+                                    <Button fx:id="clearCartButton" mnemonicParsing="false" onAction="#clearCart" text="Clear Shopping Cart" visible="false" />
+                                    <Button fx:id="shoppingCart" mnemonicParsing="false" onAction="#toggleBasket" prefHeight="39.0" prefWidth="45.0" styleClass="shoppingCart" />
+                                    <Button mnemonicParsing="false" onAction="#showLoginScreen" text="Log out" />
                                  </children>
                                  <VBox.margin>
-                                    <Insets bottom="20.0"/>
+                                    <Insets bottom="20.0" />
                                  </VBox.margin>
                               </HBox>
                               <HBox prefHeight="402.0" prefWidth="238.0">
                                  <children>
-                                    <ListView fx:id="amountOfEachProduct" prefHeight="532.0" prefWidth="73.0"
-                                              visible="false"/>
-                                    <ListView fx:id="productNameList" prefHeight="532.0" prefWidth="172.0"
-                                              visible="false"/>
-                                    <ListView fx:id="productPriceList" prefHeight="349.0" prefWidth="93.0"
-                                              visible="false"/>
+                                    <ListView fx:id="amountOfEachProduct" prefHeight="532.0" prefWidth="73.0" visible="false" />
+                                    <ListView fx:id="productNameList" prefHeight="532.0" prefWidth="172.0" visible="false" />
+                                    <ListView fx:id="productPriceList" prefHeight="349.0" prefWidth="93.0" visible="false" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="28.0" prefWidth="336.0">
                                  <children>
-                                    <ListView fx:id="totalList" prefHeight="39.0" prefWidth="171.0" visible="false"/>
-                                    <ListView fx:id="totalPriceList" prefHeight="97.0" prefWidth="167.0"
-                                              visible="false"/>
+                                    <ListView fx:id="totalList" prefHeight="39.0" prefWidth="171.0" visible="false" />
+                                    <ListView fx:id="totalPriceList" prefHeight="97.0" prefWidth="167.0" visible="false" />
                                  </children>
                               </HBox>
-                              <Button fx:id="checkoutButton" mnemonicParsing="false" onAction="#showCheckoutPane"
-                                      prefHeight="39.0" prefWidth="139.0" text="Checkout" visible="false">
+                              <Button fx:id="checkoutButton" mnemonicParsing="false" onAction="#showCheckoutPane" prefHeight="39.0" prefWidth="139.0" text="Checkout" visible="false">
                                  <padding>
-                                    <Insets top="10.0"/>
+                                    <Insets top="10.0" />
                                  </padding>
                               </Button>
                            </children>
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <Button fx:id="itemScanner" minHeight="300.0" minWidth="300.0" mnemonicParsing="false"
-                          styleClass="itemScanner">
+                  <Button fx:id="itemScanner" minHeight="300.0" minWidth="300.0" mnemonicParsing="false" styleClass="itemScanner">
                      <stylesheets>
-                        <URL value="@../Resources/StyleSheets/IdCards.css"/>
-                        <URL value="@../Resources/StyleSheets/Default.css"/>
+                        <URL value="@../Resources/StyleSheets/IdCards.css" />
+                        <URL value="@../Resources/StyleSheets/Basic.css" />
                      </stylesheets>
                   </Button>
-                  <AnchorPane fx:id="logInOptionPane" prefHeight="768.0" prefWidth="1020.0" styleClass="defaultPane"
-                              StackPane.alignment="CENTER">
+                  <AnchorPane fx:id="logInOptionPane" prefHeight="768.0" prefWidth="1020.0" styleClass="defaultPane" StackPane.alignment="CENTER">
                      <children>
-                        <HBox alignment="CENTER" layoutX="280.0" layoutY="307.0" prefHeight="99.0" prefWidth="408.0"
-                              spacing="50.0" AnchorPane.bottomAnchor="307.0" AnchorPane.leftAnchor="306.0"
-                              AnchorPane.rightAnchor="306.0" AnchorPane.topAnchor="307.0">
+                        <HBox alignment="CENTER" layoutX="280.0" layoutY="307.0" prefHeight="99.0" prefWidth="408.0" spacing="50.0" AnchorPane.bottomAnchor="307.0" AnchorPane.leftAnchor="306.0" AnchorPane.rightAnchor="306.0" AnchorPane.topAnchor="307.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Employee"/>
-                              <Button mnemonicParsing="false" onAction="#showCostumerInitialLogin" prefHeight="30.0"
-                                      prefWidth="150.0" text="Costumer"/>
+                              <Button mnemonicParsing="false" onAction="#showEmployeeLogIn" prefHeight="30.0" prefWidth="150.0" text="Employee" />
+                              <Button mnemonicParsing="false" onAction="#showCostumerInitialLogin" prefHeight="30.0" prefWidth="150.0" text="Costumer" />
                            </children>
                         </HBox>
-                        <Button layoutX="949.0" layoutY="25.0" mnemonicParsing="false" onAction="#showLoginScreen"
-                                text="Log out" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="25.0"/>
+                        <Button layoutX="949.0" layoutY="25.0" mnemonicParsing="false" onAction="#showLoginScreen" text="Log out" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="25.0" />
                      </children>
                   </AnchorPane>
-                  <BorderPane fx:id="loginBorderPane" prefHeight="768.0" prefWidth="1020.0" styleClass="defaultPane"
-                              stylesheets="@../Resources/StyleSheets/Default.css">
+                  <BorderPane fx:id="loginBorderPane" prefHeight="768.0" prefWidth="1020.0" styleClass="defaultPane" stylesheets="@../Resources/StyleSheets/Basic.css">
                      <center>
-                        <Button fx:id="idScanner" minHeight="300.0" minWidth="300.0" mnemonicParsing="false"
-                                styleClass="iDReader" stylesheets="@../Resources/StyleSheets/IdCards.css"
-                                BorderPane.alignment="CENTER"/>
+                        <Button fx:id="idScanner" minHeight="300.0" minWidth="300.0" mnemonicParsing="false" styleClass="iDReader" stylesheets="@../Resources/StyleSheets/IdCards.css" BorderPane.alignment="CENTER" />
                      </center>
                      <top>
-                        <Label fx:id="confirmText" text="SWIPE YOUR CARD TO CONFIRM YOUR PURCHASE" visible="false"
-                               BorderPane.alignment="CENTER"/>
+                        <Label fx:id="confirmText" text="SWIPE YOUR CARD TO CONFIRM YOUR PURCHASE" visible="false" BorderPane.alignment="CENTER" />
                      </top>
                      <bottom>
-                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#showLoginScreen"
-                                text="CANCEL PAYMENT AND LOGOUT" visible="false" BorderPane.alignment="CENTER"/>
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#showLoginScreen" text="CANCEL PAYMENT AND LOGOUT" visible="false" BorderPane.alignment="CENTER" />
                      </bottom>
                   </BorderPane>
                </children>

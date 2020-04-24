@@ -13,6 +13,8 @@ public class ProductPane extends TilePane {
     private final String placeHolderImage = "Resources/Images/noImageIcon.png";
 
     private ProductPane() {
+        this.setPrefTileHeight(215);
+        this.setPrefTileWidth(215);
         this.setStyle("-fx-background-color: white");
         this.setVisible(true);
         ProductButton productButton;
@@ -26,18 +28,18 @@ public class ProductPane extends TilePane {
         for (int i = 0; i < numberOfButtons; i++) {
 
             name = DB.getData();
-            imageView = new ImageView("File:" + DB.getData());
+            imageView = new ImageView( DB.getData());
 
             if (imageView.getImage().getException() != null) {
                 imageView = new ImageView(placeHolderImage);
                 System.out.println("WARNING: NO IMG URL");
             }
             id = Integer.parseInt(DB.getData());
-            imageView.setFitHeight(50);
-            imageView.setFitWidth(50);
+            imageView.setFitHeight(100);
+            imageView.setPreserveRatio(true);
             imageView.setStyle("");
             productButton = new ProductButton(name, imageView, id);
-            productButton.setPrefWidth(150);
+            productButton.setPrefWidth(100);
             listOfbuttons.add(productButton);
             this.getChildren().add(productButton);
         }

@@ -6,16 +6,16 @@
 }
 
 .ProductButton {
-    -fx-background-color: #605B8A;
+    -fx-background-color: transparent;
     -fx-background-radius: 8;
     -fx-font-size: 12;
     -fx-alignment: center-Left;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-pref-height: 50;
-    -fx-pref-width: 150;
-    -fx-border-insets: 10;
-    -fx-background-insets: 10;
-    -fx-padding: 10;
+    -fx-pref-width: 300;
+    -fx-border-insets: 25;
+    -fx-background-insets: 25;
+    -fx-padding: 25;
 }
 
 .menu-button {
@@ -57,4 +57,24 @@
 
 .myButton:hover {
     -fx-background-color: linear-gradient(to bottom, #bab1ba 40%, grey 70%);
+}
+
+.defaultPane {
+    -fx-background-color: white !important;
+}
+
+.shoppingCart {
+    -fx-background-image: url('/Resources/Images/basket.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+}
+
+.itemScanner {
+    -fx-background-image: url('/Resources/Images/scanArea.jpg');
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-position: center;
 }
