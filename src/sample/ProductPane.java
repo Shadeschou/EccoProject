@@ -1,5 +1,7 @@
 package sample;
 
+
+import DB.DB;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 

@@ -1,7 +1,5 @@
 package sample;
 
-
-
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -722,8 +720,10 @@ public class Controller implements Initializable {
         button.getStyleClass().add("myButton");
         ;
         button.setOnMouseClicked(Event -> {
-            currentProduct.updateStock(Integer.parseInt(textField.getText()));
-            showProductInfo(currentProduct.getProductID());
+            if (!textField.getText().isBlank()) {
+                currentProduct.updateStock(Integer.parseInt(textField.getText()));
+                showProductInfo(currentProduct.getProductID());
+            }
             popup.hide();
         });
         vBox.getChildren().add(labelIntro);

@@ -1,5 +1,6 @@
 package sample;
 
+import DB.DB;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
