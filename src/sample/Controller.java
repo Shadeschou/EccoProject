@@ -17,7 +17,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -64,37 +63,21 @@ public class Controller implements Initializable {
     @FXML private ListView<Integer> amountOfEachProduct;
     @FXML private Label confirmText;
     @FXML private AnchorPane addProductPaneID;
-
     @FXML private TextField nameID;
-
     @FXML private TextField priceID;
-
     @FXML private TextField stockID;
-
     @FXML private TextField supplierID;
-
     @FXML private TextField orderLimitID;
-
     @FXML private TextField ProductID;
-
     @FXML private StackPane managementPane;
-
     @FXML private AnchorPane addProductPaneID1;
-
     @FXML private Label nameField;
-
     @FXML private Label quantityField;
-
     @FXML private Label supplierField;
-
     @FXML private Label priceField;
-
     @FXML private AnchorPane productInfo;
-
     @FXML private ImageView productPicture;
-
     @FXML private ComboBox<String> comboBox;
-
     @FXML private ImageView addProductImage;
 
     private double total = 0;
@@ -578,8 +561,6 @@ public class Controller implements Initializable {
         }
     }
 
-
-}
 
 
     /***
