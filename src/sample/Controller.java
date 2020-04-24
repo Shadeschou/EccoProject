@@ -93,6 +93,7 @@ public class Controller implements Initializable {
     private double itemScannerMaxX;
     private boolean viewingBasket = false;
     private int activeId;
+    private IDCard activeIdCard;
     private Desktop desktop = Desktop.getDesktop();
     public static ProductPane productPane;
     private Product currentProduct;
@@ -291,6 +292,7 @@ public class Controller implements Initializable {
      * @param productToAdd - the product you wish to add
      */
     private void addToShoppingCart(Product productToAdd) {
+
         productToAdd.setStock(
                 productToAdd.getStock() - 1); // decrease the stock - this is done later in DB, isn't purchased yet
         String productName = productToAdd.getName();
@@ -600,6 +602,7 @@ public class Controller implements Initializable {
             from = Paths.get(selectedFile.toURI());
             to = Paths.get("src/Resources/Images/" + selectedFile.getName());
             addProductImage.setImage(new Image("File:" + from));
+            System.out.println("DEBUGGING "+to);
         }
 
     }
@@ -743,7 +746,7 @@ public class Controller implements Initializable {
     private void copyProduct() {
         try {
             Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
-            image = to.toString();
+            image = String.valueOf(to); //.toString();
             to=null;
         } catch (IOException e) {
             System.out.println("Failed to Copy f ile");

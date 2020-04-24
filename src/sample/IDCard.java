@@ -28,6 +28,7 @@ class IDCard {
     int idNo;
     int yPlacement;
     String role;
+    double balance;
     double ID_xOffset = 0;
     double ID_yOffset = 0;
     Stage stage = new Stage();
@@ -41,6 +42,8 @@ class IDCard {
         this.role = DB.getData();
         this.ID_FXML = FXMLLoader.load(getClass().getResource(fxmlName));
         this.ID_SCENE = new Scene(ID_FXML, 400, 350);
+        DB.selectSQL("SELECT fldBalance FROM tblIdCard WHERE fldIdCardID ="+this.idNo);
+        this.balance = Double.parseDouble(DB.getData());
 
         ID_SCENE.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);
