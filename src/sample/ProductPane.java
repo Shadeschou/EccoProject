@@ -29,7 +29,7 @@ public class ProductPane extends TilePane {
             imageView = new ImageView("File:" + DB.getData());
 
             if (imageView.getImage().getException() != null) {
-                imageView = new ImageView("Resources/Images/noImageIcon.png");
+                imageView = new ImageView(placeHolderImage);
                 System.out.println("WARNING: NO IMG URL");
             }
             id = Integer.parseInt(DB.getData());
