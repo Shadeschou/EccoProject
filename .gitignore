@@ -30,7 +30,7 @@ hs_err_pid*
 *.csv
 
 #Idea
-.idea
+.idea/workspace.xml
 
 #Out
 out
