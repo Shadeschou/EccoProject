@@ -25,14 +25,14 @@ import java.io.IOException;
  */
 class IDCard {
 
-    int idNo;
-    int yPlacement;
-    String role;
-    double balance;
-    double ID_xOffset = 0;
-    double ID_yOffset = 0;
-    Stage stage = new Stage();
-    Parent ID_FXML;
+    private int idNo;
+    private int yPlacement;
+    private String role;
+    private double balance;
+    private double ID_xOffset = 0;
+    private double ID_yOffset = 0;
+    private Stage stage = new Stage();
+    private Parent ID_FXML;
     private Scene ID_SCENE;
 
     IDCard(String fxmlName, int idNo) throws IOException {
@@ -48,5 +48,77 @@ class IDCard {
         ID_SCENE.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(ID_SCENE);
+    }
+
+    public int getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(int idNo) {
+        this.idNo = idNo;
+    }
+
+    public int getyPlacement() {
+        return yPlacement;
+    }
+
+    public void setyPlacement(int yPlacement) {
+        this.yPlacement = yPlacement;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public double getID_xOffset() {
+        return ID_xOffset;
+    }
+
+    public void setID_xOffset(double ID_xOffset) {
+        this.ID_xOffset = ID_xOffset;
+    }
+
+    public double getID_yOffset() {
+        return ID_yOffset;
+    }
+
+    public void setID_yOffset(double ID_yOffset) {
+        this.ID_yOffset = ID_yOffset;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Parent getID_FXML() {
+        return ID_FXML;
+    }
+
+    public void setID_FXML(Parent ID_FXML) {
+        this.ID_FXML = ID_FXML;
+    }
+
+    public Scene getID_SCENE() {
+        return ID_SCENE;
+    }
+
+    public void setID_SCENE(Scene ID_SCENE) {
+        this.ID_SCENE = ID_SCENE;
     }
 }

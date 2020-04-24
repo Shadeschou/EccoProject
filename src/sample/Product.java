@@ -56,8 +56,12 @@ public class Product {
     Product(double price, String name, String imgPath, int productID) {
         this.price = price;
         this.name = name;
-        this.imgPath = imgPath;
+        if(imgPath!=null){
+            this.imgPath = imgPath.substring(4);
+        }
         this.productID = productID;
+
+
 
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.setStyle("-fx-background-image: url(" + this.imgPath + ") !important;" +

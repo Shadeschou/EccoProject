@@ -81,6 +81,8 @@ public class Controller implements Initializable {
     @FXML private ComboBox<String> comboBox;
     @FXML private ImageView addProductImage;
     @FXML private HBox inventoryPane;
+    @FXML private Label notEnoughMoneyField;
+    @FXML private Label userBalance;
 
     private double total = 0;
     private double scannerMinY;
@@ -92,8 +94,7 @@ public class Controller implements Initializable {
     private double itemScannerMinX;
     private double itemScannerMaxX;
     private boolean viewingBasket = false;
-    private int activeId;
-    private IDCard activeIdCard;
+    private IDCard activeId;
     private Desktop desktop = Desktop.getDesktop();
     public static ProductPane productPane;
     private Product currentProduct;
@@ -292,34 +293,38 @@ public class Controller implements Initializable {
      * @param productToAdd - the product you wish to add
      */
     private void addToShoppingCart(Product productToAdd) {
+        notEnoughMoneyField.setVisible(false);
+        if (activeId.getBalance() >= productToAdd.getPrice()) {
+            activeId.setBalance(activeId.getBalance()-productToAdd.getPrice());
+            productToAdd.setStock(
+                    productToAdd.getStock() - 1); // decrease the stock - this is done later in DB, isn't purchased yet
+            String productName = productToAdd.getName();
+            double productPrice = productToAdd.getPrice();
 
-        productToAdd.setStock(
-                productToAdd.getStock() - 1); // decrease the stock - this is done later in DB, isn't purchased yet
-        String productName = productToAdd.getName();
-        double productPrice = productToAdd.getPrice();
-
-        // if shopping cart dont contain item, add it, else increment the price and amount of the product in cart
-        if (!currentShoppingCart.contains(productName)) {
-            quantity.add(1);
-            productsInShoppingCart.add(productName);
-            prices.add(productPrice);
-            currentShoppingCart.add(productName);
-        }
-        else {
-            for (String product : currentShoppingCart) {
-                if (productName.equalsIgnoreCase(product)) {
-                    int indexOfProduct = productsInShoppingCart.indexOf(productName);
-                    quantity.set(indexOfProduct, quantity.get(indexOfProduct) + 1);
-                    prices.set(indexOfProduct, prices.get(indexOfProduct) + productPrice);
-                    break;
+            // if shopping cart dont contain item, add it, else increment the price and amount of the product in cart
+            if (!currentShoppingCart.contains(productName)) {
+                quantity.add(1);
+                productsInShoppingCart.add(productName);
+                prices.add(productPrice);
+                currentShoppingCart.add(productName);
+            }
+            else {
+                for (String product : currentShoppingCart) {
+                    if (productName.equalsIgnoreCase(product)) {
+                        int indexOfProduct = productsInShoppingCart.indexOf(productName);
+                        quantity.set(indexOfProduct, quantity.get(indexOfProduct) + 1);
+                        prices.set(indexOfProduct, prices.get(indexOfProduct) + productPrice);
+                        break;
+                    }
                 }
             }
+            amountOfEachProduct.setItems(quantity);
+            productNameList.setItems(productsInShoppingCart);
+            productPriceList.setItems(prices);
+        }else {
+            notEnoughMoneyField.setVisible(true);
         }
-        amountOfEachProduct.setItems(quantity);
-        productNameList.setItems(productsInShoppingCart);
-        productPriceList.setItems(prices);
     }
-
 
     /**
      *just used to show the checkoutPane, and to view the IDcard used to log in, which can be used to confirm purchase
@@ -331,10 +336,10 @@ public class Controller implements Initializable {
         confirmText.setVisible(true);
         cancelButton.setVisible(true);
         for (IDCard idcard : idCardArrayList) {
-            if (idcard.idNo == activeId) {
-                idcard.stage.setX(0);
-                idcard.stage.setY(0);
-                idcard.stage.show();
+            if (idcard == activeId) {
+                idcard.getStage().setX(0);
+                idcard.getStage().setY(0);
+                idcard.getStage().show();
             }
         }
 
@@ -362,30 +367,31 @@ public class Controller implements Initializable {
     private void addListenersToID() {
         for (IDCard id : idCardArrayList) {
 
-            id.ID_FXML.setOnMousePressed(event -> {
-                id.ID_xOffset = event.getSceneX();
-                id.ID_yOffset = event.getSceneY();
+            id.getID_FXML().setOnMousePressed(event -> {
+                id.setID_xOffset( event.getSceneX());
+                id.setID_yOffset( event.getSceneY());
             });
-            id.ID_FXML.setOnMouseDragged(event -> {
-                id.stage.setX(event.getScreenX() - id.ID_xOffset);
-                id.stage.setY(event.getScreenY() - id.ID_yOffset);
-                if (id.stage.getY() > scannerMinY && id.stage.getY() < scannerMaxY && id.stage.getX() > scannerMinX && id.stage.getX() < scannerMaxX) {
-                    id.yPlacement = 0;
+            id.getID_FXML().setOnMouseDragged(event -> {
+                id.getStage().setX(event.getScreenX() - id.getID_xOffset());
+                id.getStage().setY(event.getScreenY() - id.getID_yOffset());
+                if (id.getStage().getY() > scannerMinY && id.getStage().getY() < scannerMaxY && id.getStage().getX() > scannerMinX && id.getStage().getX() < scannerMaxX) {
+                    id.setyPlacement(0);
                     for (IDCard id2 : idCardArrayList) {
-                        id2.yPlacement += 210;
+                        id2.setyPlacement(id2.getyPlacement()+ 210);
                         for (IDCard ids : idCardArrayList) {
-                            ids.stage.close();
+                            ids.getStage().close();
 
-                            ids.stage.setY(-280 + ids.yPlacement);
-                            ids.stage.setX(0);
+                            ids.getStage().setY(-280 + ids.getyPlacement());
+                            ids.getStage().setX(0);
                         }
                     }
                     if (confirmText.isVisible()) {
                         storeTheSale();
                     }
                     else {
-                        activeId = id.idNo;
-                        if (id.role.equalsIgnoreCase("Employee")) {
+                        activeId = id;
+                        userBalance.setText("Balance: "+activeId.getBalance());
+                        if (id.getRole().equalsIgnoreCase("Employee")) {
                             showEmployeeOption();
                         }
                         else {
@@ -414,7 +420,7 @@ public class Controller implements Initializable {
         Connection con = DB.getConnection();
         int iteratorCount = 0;
         try {
-            DB.selectSQL("SELECT fldUserId FROM tblUser WHERE fldIdCardId =" + activeId);
+            DB.selectSQL("SELECT fldUserId FROM tblUser WHERE fldIdCardId =" + activeId.getIdNo());
             int costumerId = Integer.parseInt(DB.getData());
             callableStatement = con.prepareCall("{call Ecco.dbo.storeReceipt(?,?,?,?)}");
             callableStatement.setInt(1, costumerId);
@@ -468,6 +474,7 @@ public class Controller implements Initializable {
      * clear the session, often used when going to a new pane
      */
     private void clearSession() {
+        notEnoughMoneyField.setVisible(false);
         confirmText.setVisible(false);
         cancelButton.setVisible(false);
         currentShoppingCart.clear();
@@ -562,10 +569,10 @@ public class Controller implements Initializable {
     private void showIDs() {
         int yPosition = -80;
         for (IDCard id : idCardArrayList) {
-            id.stage.setY(yPosition);
-            id.stage.setX(0);
+            id.getStage().setY(yPosition);
+            id.getStage().setX(0);
             yPosition += 200;
-            id.stage.show();
+            id.getStage().show();
         }
     }
 
@@ -591,9 +598,8 @@ public class Controller implements Initializable {
     }
 
     /***
-     * creates a filechooser which selects it's URL path
+     * creates a file chooser which selects it's URL path
      */
-
     public void selectImage() {
         final FileChooser fileChooser = new FileChooser();
         final File selectedFile = fileChooser.showOpenDialog(addProductPaneID.getScene().getWindow());
@@ -602,7 +608,6 @@ public class Controller implements Initializable {
             from = Paths.get(selectedFile.toURI());
             to = Paths.get("src/Resources/Images/" + selectedFile.getName());
             addProductImage.setImage(new Image("File:" + from));
-            System.out.println("DEBUGGING "+to);
         }
 
     }
