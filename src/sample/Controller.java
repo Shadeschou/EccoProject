@@ -595,10 +595,10 @@ public class Controller implements Initializable {
     public void selectImage() {
         final FileChooser fileChooser = new FileChooser();
         final File selectedFile = fileChooser.showOpenDialog(addProductPaneID.getScene().getWindow());
-
         if (selectedFile != null) {
+
             from = Paths.get(selectedFile.toURI());
-            to = Paths.get(".../EccoProject/src/Resources/Images" + selectedFile.getName());
+            to = Paths.get("src/Resources/Images/" + selectedFile.getName());
             addProductImage.setImage(new Image("File:" + from));
         }
 
