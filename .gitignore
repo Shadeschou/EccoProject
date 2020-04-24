@@ -28,6 +28,9 @@ hs_err_pid*
 
 # High scores
 *.csv
-# Datasource local storage ignored files
-/dataSources.local.xml
-/dataSources/
+
+#Idea
+.idea
+
+#Out
+out
