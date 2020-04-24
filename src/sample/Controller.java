@@ -44,6 +44,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -416,7 +417,7 @@ public class Controller implements Initializable {
             callableStatement = con.prepareCall("{call Ecco.dbo.storeReceipt(?,?,?,?)}");
             callableStatement.setInt(1, costumerId);
             callableStatement.setDouble(2, totalPrice.get(0));
-            callableStatement.setDate(3, java.sql.Date.valueOf(java.time.LocalDate.now()));
+            callableStatement.setTimestamp(3, java.sql.Timestamp.valueOf(LocalDateTime.now()));
             callableStatement.registerOutParameter(4, Types.INTEGER);
             callableStatement.execute();
             int receiptId = callableStatement.getInt(4);
